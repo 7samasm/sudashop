@@ -1,5 +1,11 @@
-const configValues = require('./config');
+// const configValues = require('./config');
 const mongoose = require('mongoose')
+
+const configValues = {
+    db  : "shop",
+    uname: "7admin",
+    pwd  : "umTR@x7.b_whAC6"
+}
 
 
 const getDbConnectionString = () => {
