@@ -4,7 +4,7 @@
       <v-row>
         <v-col class="py-1">
           <v-avatar size="40px" class='mr-2'>
-            <v-img :src="`http://localhost:3000/d.jpg`" alt="" class="avatar"></v-img>
+            <v-img :src="`${url}/d.jpg`" alt="" class="avatar"></v-img>
           </v-avatar>
           <span>{{comment.userId.name}}</span>
         </v-col>

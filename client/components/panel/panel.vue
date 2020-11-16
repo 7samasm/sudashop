@@ -3,7 +3,7 @@
 		<v-row align="center">
 			<v-col cols="3" class="py-6">
 				<!-- <v-avatar size="70px" class='ml-4'> -->
-				<v-img :src="`http://localhost:3000/d.jpg`" alt="" :aspect-ratio="643/376" class="ml-2 img"></v-img>
+				<v-img :src="`${url}/d.jpg`" alt="" :aspect-ratio="643/376" class="ml-2 img"></v-img>
 				<!-- </v-avatar> -->
 			</v-col>
 			<v-col cols="9">

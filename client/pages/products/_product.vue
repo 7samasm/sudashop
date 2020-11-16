@@ -4,7 +4,7 @@
     <v-col md="7" v-if="prod.hasOwnProperty('title')">
       <!-- images card -->
       <v-card text>
-        <v-img :aspect-ratio="643/376" :src="`http://localhost:3000/d.jpg`" alt=""></v-img>
+        <v-img :aspect-ratio="643/376" :src="`${url}/d.jpg`" alt=""></v-img>
       </v-card>
       <!-- images card -->
 

@@ -72,7 +72,7 @@ module.exports = {
   ** Add element-ui in our app, see plugins/element-ui.js file
   */
   plugins: [
-    { src: '@/plugins/vuelidate', ssr: true },
+    '@/plugins/vuelidate',
     '@/plugins/api'
   ],
   buildModules: [

@@ -2,6 +2,8 @@ const pick = require('lodash').pick
 const objectId = require('mongoose').Types.ObjectId
 const isValidObjectId = require('mongoose').isValidObjectId
 const emitErrors = require('../../utils/helpers').emitErrors
+const {_12_ROW_PER_PAGE} = require('../../utils/consts')
+
 
 const Product = require('../../models/product');
 const User = require('../../models/user')
@@ -70,7 +72,7 @@ exports.getUserProducts = async (ctx,next) => {
     const docs = await Product.paginate(
       { userId },
       {
-        limit : +query.limit || 12,
+        limit : +query.limit || _12_ROW_PER_PAGE,
         page: +query.page || 1
       }
     )
