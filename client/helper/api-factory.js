@@ -31,12 +31,12 @@ export default axios => ({
   deleteCartItem({productId}) {
     return axios.delete(`/hpi/admin/cart/${productId}`)
   },
-  // // overide by nuxt auth
-  //  login(email,password) {
-  // 	return axios.$post('/hpi/admin/login',{email,password})
-  //  },	
   getCart() {
     return axios.$get('/hpi/admin/cart')
+  },
+  // admin products
+  getMyProducts(){
+    return axios.$get('/hpi/admin/products')
   },
   getProductByIdAndUser(id) {
     return axios.$get('/hpi/admin/products/' + id)
@@ -49,5 +49,9 @@ export default axios => ({
   },
   deleteProduct({productId}) {
     return axios.delete(`/hpi/admin/delete-product/${productId}`)
+  },
+  // comment
+  addComment({productId,commentText}){
+    return axios.$post('/hpi/admin/comment', {productId,commentText})
   }
 })

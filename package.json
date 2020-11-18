@@ -1,7 +1,7 @@
 {
-  "name": "sudashop",
+  "name": "Sudashop",
   "version": "1.0.0-alpha.0",
-  "description": "Based on Vue.js 2.x, Koa 2.x, Element-UI and Nuxt.js",
+  "description": "Based on Vue.js 2.x, Koa 2.x, vuetify-UI and Nuxt.js",
   "author": "7sam",
   "license": "MIT",
   "main": "dist/server-app.js",

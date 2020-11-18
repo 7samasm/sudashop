@@ -46,7 +46,7 @@ export const mutations = {
 
 export const actions = {
   // set store on server
-  async nuxtServerInit({ dispatch, commit, getters }, {$auth,$api}) {
+  async nuxtServerInit({ commit }, {$auth,$api}) {
     try {
       // commit unAuthunticated parts
       commit('user/set_section', await $api.getSections())
@@ -61,7 +61,7 @@ export const actions = {
       console.log(e);
     }
   },
-  [SET_DATA_AND_PAGINATION]({ commit, state }, payload) {
+  [SET_DATA_AND_PAGINATION]({ commit }, payload) {
     commit(SET_PRODUCTS, payload.docs)
     commit(SET_PAGINATION, (function() {
       const copyData = { ...payload }
@@ -69,12 +69,9 @@ export const actions = {
       return copyData
     }()))
   },
-  async addComment({ commit, getters }, { productId, commentText }) {
+  async addComment({ commit }, commentObject) {
     try {
-      const comment = await this.$axios.$post('/hpi/admin/comment', {
-        productId,
-        commentText
-      })
+      const comment = await this.$api.addComment(commentObject)
       commit('ADD_COMMENT', comment)
     }catch (e) {
       console.log(e)

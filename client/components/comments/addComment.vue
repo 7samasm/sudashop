@@ -6,10 +6,23 @@
     </v-card-title>
     <v-row dense class="flex-column" align="center">
       <v-col sm="11">
-        <v-textarea v-model="commentText" rowHeight="5" label="your Comment ..." color="teal" outlined></v-textarea>
+        <v-textarea
+          v-model="commentText"
+          rowHeight="5"
+          label="your Comment ..."
+          color="teal"
+          outlined
+        ></v-textarea>
       </v-col>
       <v-col sm="11">
-        <v-btn text outlined color="teal" @click="insertComment" class="mb-2 float-right">
+        <v-btn
+          text
+          outlined
+          color="teal"
+          :disabled="!isLoggedIn"
+          @click="insertComment"
+          class="mb-2 float-right"
+        >
           <v-icon>mdi-checkbox-marked-circle-outline</v-icon>
           add
         </v-btn>
@@ -19,27 +32,31 @@
 </template>
 <script>
 // align="center" justify="center"
-import {mapActions} from 'vuex'
+import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
-    	id : this.$route.params.product,
-      commentText: ''
-    }
+      id: this.$route.params.product,
+      commentText: "",
+    };
+  },
+  computed: {
+    ...mapGetters({
+      isLoggedIn: "isLoggedIn",
+    }),
   },
   methods: {
     ...mapActions({
-      addComment : 'addComment'
+      addComment: "addComment",
     }),
     insertComment() {
-    	const payload = {
-    		productId   : this.id,
-    		commentText : this.commentText 
-    	}
-      this.addComment(payload)
-      this.commentText = ''
-    }
-  }
-}
-
+      const payload = {
+        productId: this.id,
+        commentText: this.commentText,
+      };
+      this.addComment(payload);
+      this.commentText = "";
+    },
+  },
+};
 </script>

@@ -13,17 +13,18 @@ module.exports = {
     // middleware: [
     //   'check-auth'
     // ]
-    routeNameSplitter : '/'
+    routeNameSplitter: '/'
   },
   /*
   ** Headers of the page
   */
   head: {
-    title: 'Hare 2.0',
+    titleTemplate: '%s - ' + process.env.npm_package_name,
+    title: process.env.npm_package_name || '',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Nuxt.js project' }
+      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
@@ -53,7 +54,7 @@ module.exports = {
   /*
   ** Customize the Progress Bar
   */
- loading: { color: '#ffffff' , height : '2px'},
+  loading: { color: '#ffffff', height: '2px' },
   /*
   ** Generate config
   */
@@ -103,7 +104,7 @@ module.exports = {
     [
       'vue-currency-filter/nuxt',
       {
-        symbol : 'SDG',
+        symbol: 'SDG',
         thousandsSeparator: ',',
         fractionCount: 2,
         fractionSeparator: '.',
@@ -115,21 +116,21 @@ module.exports = {
   axios: {
     browserBaseURL: '/'
   },
-  auth : {
-    redirect : {
-      logout : '/',
-      login  : '/admin/login'
+  auth: {
+    redirect: {
+      logout: '/',
+      login: '/admin/login'
     },
     strategies: {
       local: {
         endpoints: {
-          login: { url : '/hpi/admin/login' , method : 'post' , propertyName : 'token' },
-          user : { url : '/hpi/admin/user' , method : 'get' ,  propertyName : 'user'},
+          login: { url: '/hpi/admin/login', method: 'post', propertyName: 'token' },
+          user: { url: '/hpi/admin/user', method: 'get', propertyName: 'user' },
           logout: false
         },
         // tokenRequired : false,
-        tokenType     : '',
-        tokenName     : 'x-Auth'
+        tokenType: '',
+        tokenName: 'x-Auth'
       }
     }
   },
@@ -147,6 +148,6 @@ module.exports = {
     ]
   },
   env: {
-    baseUrl : process.env.BASE_URL || 'http://localhost:3000',
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000',
   },
 }

@@ -37,10 +37,15 @@ export const actions = {
       try {
         // delete product from database
         await this.$api.deleteProduct({ productId: id })
+        // in case user cart his own products which he want to delete
         const cart       = await this.$api.getCart()
-        const myproducts = await this.$axios.$get('/hpi/admin/products')
+        // get total page after delete item
+        const {totalPages} = await this.$api.getMyProducts()
+        // update ui and get right db pagination
+        const payload    = await this.$api.fetchProducts({page : totalPages},'/hpi/admin/products')
+        // update cart,data pagination state
         commit('set_cart', cart)
-        dispatch(SET_DATA_AND_PAGINATION,myproducts,{root:true})
+        dispatch(SET_DATA_AND_PAGINATION,payload,{root:true})
       } catch(e) {
         console.log(e);
       }
@@ -56,8 +61,8 @@ export const actions = {
         await this.$auth
         .loginWith('local', {
           data: {
-            email   : email,
-            password: password
+            email,
+            password
           }
         })
         commit('set_cart', await this.$api.getCart())

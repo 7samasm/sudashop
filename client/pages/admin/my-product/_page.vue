@@ -25,7 +25,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   middleware: ['auth','clear_cardList'],
   async fetch({ store, $api, params }) {
-    const products = await $api.fetchProducts({ page: params.page || 1 }, '/hpi/admin/products')
+    const products = await $api.fetchProducts({ page: params.page}, '/hpi/admin/products')
     store.dispatch(SET_DATA_AND_PAGINATION, products)
   },
   methods: {
