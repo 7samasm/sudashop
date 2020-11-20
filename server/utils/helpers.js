@@ -101,10 +101,17 @@ const emitErrors = (ctx,error) => {
   ctx.app.emit('error',error,ctx);
 }
 
+const getEnvironmentVariable = variable => process.env[variable];
+const connectGlobalDB = () => `mongodb://${getEnvironmentVariable(consts.DB_USERNAME)}:${encodeURIComponent(getEnvironmentVariable(consts.DB_PASSWORD))}@ds257648.mlab.com:57648/${getEnvironmentVariable(consts.DB)}`
+const connectLocalDB = () => `mongodb://localhost:27017/${getEnvironmentVariable(consts.DB)}`
+
 module.exports = {
   decode,
   handleTokenExp,
   createRequest,
   getUserData,
-  emitErrors
+  emitErrors,
+  getEnvironmentVariable,
+  connectGlobalDB,
+  connectLocalDB
 }

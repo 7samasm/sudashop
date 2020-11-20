@@ -1,17 +1,17 @@
-// const configValues = require('./config');
 const mongoose = require('mongoose')
 
-const configValues = {
-    db  : "shop",
-    uname: "7admin",
-    pwd  : "umTR@x7.b_whAC6"
-}
+const {
+	getEnvironmentVariable,
+	connectGlobalDB,
+	connectLocalDB
+} = require('../utils/helpers')
 
+// dont forget to use Environment Variables in local machine or global
 
 const getDbConnectionString = () => {
-	if (process.env.NODE_ENV === 'production')
-		return `mongodb://${configValues.uname}:${encodeURIComponent(configValues.pwd)}@ds257648.mlab.com:57648/${configValues.db}`;
-	return `mongodb://localhost:27017/${configValues.db}`
+	if (getEnvironmentVariable('NODE_ENV') === 'production')
+		return connectGlobalDB()
+	return connectLocalDB()
 }
 
 module.exports = {

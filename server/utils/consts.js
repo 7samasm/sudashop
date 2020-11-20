@@ -14,6 +14,12 @@ const LB_ADDR = process.env.LB_ADDR || `http://${HOST}:${PORT}/hpi`
 
 const _12_ROW_PER_PAGE = 6
 
+// envs
+
+const DB          = 'DB'
+const DB_USERNAME = 'DB_USERNAME'
+const DB_PASSWORD = 'DB_PASSWORD'
+
 /**
  * Where to get your JWT/OAuth bearer token.
  *
@@ -43,5 +49,8 @@ module.exports = Object.freeze({
   ENDPOINT_BACKEND_AUTH,
   ENDPOINT_BACKEND_VALIDATE,
   MOCK_ENDPOINT_BACKEND,
-  _12_ROW_PER_PAGE
+  _12_ROW_PER_PAGE,
+  DB,
+  DB_USERNAME,
+  DB_PASSWORD
 })

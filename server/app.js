@@ -5,7 +5,7 @@ const proxy = require('koa-proxies')
 const config = require('../nuxt.config.js')
 const useMiddlewares = require('./middlewares')
 const useRoutes = require('./routes')
-const appConfig = require('./config')
+const {connectDb} = require('./config')
 const consts = require('./utils/consts')
 
 // Start nuxt.js
@@ -63,14 +63,14 @@ async function start() {
   })
 
   //conect to db
-appConfig.connectDb((err,res) => {
+connectDb((err,res) => {
 	if (err) return console.log(err.message)
   app.listen(port, host)
 })
 
   const _host = host === '0.0.0.0' ? 'localhost' : host
   // eslint-disable-next-line no-console
-  console.log('\n' + chalk.bgGreen.black(' OPEN ') + chalk.green(` http://${_host}:${port}\n`))
+  console.log('\n' + chalk.bgHex('#009688').white(' OPEN ') + chalk.white(` http://${_host}:${port}\n`))
 }
 
 start()
