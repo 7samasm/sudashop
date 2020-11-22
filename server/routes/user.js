@@ -48,7 +48,7 @@ router.route({
   handler : [isAuth,userController.putEditProduct]
 })
 
-router.delete('/delete-product/:prodId',isAuth,userController.deleteProduct)
+router.post('/delete-product',isAuth,userController.deleteProduct)
 router.get('/products',isAuth,userController.getUserProducts);
 router.get('/products/:id',isAuth,userController.getUserProduct);
 

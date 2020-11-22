@@ -47,8 +47,8 @@ export default axios => ({
   editProduct(productId) {
     return axios.put('/hpi/admin/edit-product', productId)
   },
-  deleteProduct({productId}) {
-    return axios.delete(`/hpi/admin/delete-product/${productId}`)
+  deleteProduct(ajaxPayload) {
+    return axios.$post(`/hpi/admin/delete-product`,ajaxPayload)
   },
   // comment
   addComment({productId,commentText}){

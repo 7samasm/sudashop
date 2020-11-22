@@ -30,22 +30,32 @@ export const mutations = {
 
 export const actions = {
   async deleteProduct({ commit, dispatch }, payload) {
-    const { id, title } = payload
+    const { title, ajaxPayload } = payload
     if (confirm(`delete ${title} ?`)) {
       // delete product from ui
       // dispatch(DELETE_PRODUCT,id,{root:true});
       try {
         // delete product from database
-        await this.$api.deleteProduct({ productId: id })
+        const paginationData = await this.$api.deleteProduct(ajaxPayload)
         // in case user cart his own products which he want to delete
         const cart       = await this.$api.getCart()
-        // get total page after delete item
-        const {totalPages} = await this.$api.getMyProducts()
-        // update ui and get right db pagination
-        const payload    = await this.$api.fetchProducts({page : totalPages},'/hpi/admin/products')
         // update cart,data pagination state
         commit('set_cart', cart)
-        dispatch(SET_DATA_AND_PAGINATION,payload,{root:true})
+        
+        const metaData = {
+          isPageParamGreaterThanTotalPages : false,
+          paginationData : {
+            ...paginationData
+          }
+        }
+        const {page} = this.app.context.params
+        if (page > paginationData.totalPages) {
+          metaData.isPageParamGreaterThanTotalPages = true
+        }
+
+        return metaData;
+        
+        // dispatch(SET_DATA_AND_PAGINATION,paginationData,{root:true})
       } catch(e) {
         console.log(e);
       }

@@ -17,6 +17,8 @@
             title,
             ajaxPayload: {
               productId: id,
+              sortBy: $route.params.sort,
+              orderBy: $route.params.order,
               page: $route.params.page,
             },
           })
@@ -42,8 +44,27 @@
 </template>
 
 <script>
-import myProductsMixin from "./myProductsMixin";
+import { SET_DATA_AND_PAGINATION } from "~/store";
+import myProductsMixin from "../../myProductsMixin";
 export default {
+  async fetch({ $api, params, store }) {
+    const { sort, order, page } = params;
+    const data = await $api.fetchProducts(
+      {
+        sortBy: sort,
+        orderBy: order,
+        page: page,
+      },
+      `/hpi/admin/products/`
+    );
+    store.dispatch(SET_DATA_AND_PAGINATION, data);
+  },
+  computed: {
+    fallbackUrlCasePageGreaterThanTotalPages() {
+      const { sort, order, page } = this.$route.params;
+      return `/admin/my-product/${sort}/${order}/${page - 1}`
+    },
+  },
   mixins: [myProductsMixin],
 };
 </script>

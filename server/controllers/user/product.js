@@ -1,8 +1,9 @@
 const pick = require('lodash').pick
+const chalk = require('chalk')
 const objectId = require('mongoose').Types.ObjectId
 const isValidObjectId = require('mongoose').isValidObjectId
 const emitErrors = require('../../utils/helpers').emitErrors
-const {_12_ROW_PER_PAGE} = require('../../utils/consts')
+const {setControllerPaginationLogic} = require('../products')
 
 
 const Product = require('../../models/product');
@@ -52,33 +53,23 @@ exports.putEditProduct = async (ctx, next) => {
 exports.deleteProduct = async (ctx, next) => {
   try {
     await next()
+    const userId = ctx.req.userId;
     const {request} = ctx
-    const prodId = request.params.prodId
-    const doc = await Product.findById(prodId)
-    doc.remove()
-    ctx.status = 200
-    ctx.body   = doc
+    const {productId} = request.body
+    const doc = await Product.findById(productId)
+    await doc.remove()
+    await setControllerPaginationLogic(ctx,{userId},request.body)
   } catch (e) {
     emitErrors(ctx,e)
   }
 };
 
 exports.getUserProducts = async (ctx,next) => {
-  const {req,query} = ctx
-  const userId = req.userId;
+  const userId = ctx.req.userId;
   try {
     await next()
     if (!isValidObjectId(userId)) throw new Error('id is invalid')
-    const docs = await Product.paginate(
-      { userId },
-      {
-        limit : +query.limit || _12_ROW_PER_PAGE,
-        page: +query.page || 1
-      }
-    )
-    ctx.status = 200
-    ctx.body = docs
-    
+    await setControllerPaginationLogic(ctx,{userId})
   } catch (e) {
     emitErrors(ctx,e)
   }

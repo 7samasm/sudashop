@@ -13,23 +13,32 @@ const mapValueKeys = (prefix = '$') => {
   return obj
 }
 
+
+const setControllerPaginationLogic = async (ctx, paginateQuery = {},postedQueries = null) => {
+  let query = ctx.query
+  if (postedQueries) {
+    query = postedQueries
+  } 
+  const sort = {};
+  if (query.sortBy && query.orderBy)
+    sort[query.sortBy] = query.orderBy === 'desc' ? -1 : 1;
+  const result = await Product.paginate(paginateQuery,
+    {
+      sort,
+      limit: +query.limit || _12_ROW_PER_PAGE,
+      page: +query.page || 1
+    }
+  );
+  ctx.status = 200;
+  ctx.body = result;
+}
+
+exports.setControllerPaginationLogic = setControllerPaginationLogic
+
 exports.getIndex = async (ctx, next) => {
   try {
     await next()
-    const { query } = ctx
-    const sort = {}
-    //check sortBy and orderBy url's query
-    if (query.sortBy && query.orderBy)
-      sort[query.sortBy] = query.orderBy === 'desc' ? -1 : 1
-    const result = await Product.paginate({},
-      {
-        sort,
-        limit: +query.limit || _12_ROW_PER_PAGE,
-        page: +query.page || 1
-      }
-    )
-    ctx.status = 200
-    ctx.body = result
+    await setControllerPaginationLogic(ctx)
   } catch (error) {
     emitErrors(ctx, error)
   }
@@ -63,20 +72,8 @@ exports.getProduct = async (ctx, next) => {
 exports.getProductsBySection = async (ctx, next) => {
   try {
     await next()
-    const { query, params } = ctx
-    const sort = {}
-    if (query.sortBy && query.orderBy)
-      sort[query.sortBy] = query.orderBy === 'desc' ? -1 : 1
-    const section = params.section;
-    const result = await Product.paginate({ section },
-      {
-        sort: sort,
-        limit: +query.limit || _12_ROW_PER_PAGE,
-        page: +query.page || 1
-      }
-    )
-    ctx.status = 200
-    ctx.body = result
+    const section = ctx.params.section;
+    await setControllerPaginationLogic(ctx, {section});
     // res.send(result).status(200)
   } catch (error) {
     emitErrors(ctx, error)

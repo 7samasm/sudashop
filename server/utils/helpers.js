@@ -102,8 +102,8 @@ const emitErrors = (ctx,error) => {
 }
 
 const getEnvironmentVariable = variable => process.env[variable];
-const connectGlobalDB = () => `mongodb://${getEnvironmentVariable(consts.DB_USERNAME)}:${encodeURIComponent(getEnvironmentVariable(consts.DB_PASSWORD))}@ds257648.mlab.com:57648/${getEnvironmentVariable(consts.DB)}`
-const connectLocalDB = () => `mongodb://localhost:27017/${getEnvironmentVariable(consts.DB)}`
+const getGlobalDBUrl = () => `mongodb://${getEnvironmentVariable(consts.DB_USERNAME)}:${encodeURIComponent(getEnvironmentVariable(consts.DB_PASSWORD))}@ds257648.mlab.com:57648/${getEnvironmentVariable(consts.DB)}`
+const getLocalDBUrl = () => `mongodb://localhost:27017/${getEnvironmentVariable(consts.DB)}`
 
 module.exports = {
   decode,
@@ -112,6 +112,6 @@ module.exports = {
   getUserData,
   emitErrors,
   getEnvironmentVariable,
-  connectGlobalDB,
-  connectLocalDB
+  getGlobalDBUrl,
+  getLocalDBUrl
 }

@@ -2,16 +2,16 @@ const mongoose = require('mongoose')
 
 const {
 	getEnvironmentVariable,
-	connectGlobalDB,
-	connectLocalDB
+	getGlobalDBUrl,
+	getLocalDBUrl
 } = require('../utils/helpers')
 
 // dont forget to use Environment Variables in local machine or global
 
 const getDbConnectionString = () => {
 	if (getEnvironmentVariable('NODE_ENV') === 'production')
-		return connectGlobalDB()
-	return connectLocalDB()
+		return getGlobalDBUrl()
+	return getLocalDBUrl()
 }
 
 module.exports = {
