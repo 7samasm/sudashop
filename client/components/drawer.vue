@@ -21,7 +21,7 @@
 
       <v-list dense shaped>
 
-        <v-list-item v-for="item in items" :to="item.link" :key="item.title" v-if="item.render">
+        <v-list-item v-for="item in items" :to="item.link" :key="item.key">
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
@@ -59,25 +59,29 @@ export default {
       return this.user ? this.user.name : '' 
     },
     items() {
-      return [{
+      return [
+        {
+          key : 0,
           title: 'Home',
           icon: 'mdi-home-outline',
           link: '/',
           render: true
         },
         {
+          key : 1,
           title: 'add product',
           icon: 'mdi-plus',
           link: '/admin/add-product',
           render: this.isLoggedIn
         },
         {
+          key : 2,
           title: 'My Products',
           icon: 'mdi-briefcase-outline',
           link: '/admin/my-product',
           render: this.isLoggedIn
         }
-      ]
+      ].filter(item => item.render)
     }
   },
   methods: {

@@ -6,37 +6,34 @@
 					<v-form>
 						<v-text-field 
 							ref="name"
-							:rules="nameRules"
 							label="username"
 							appendIcon="mdi-account-outline"
 							v-model.trim="name"
 							:color="baseColor"></v-text-field>
 							<!-- <pre>{{this.$v}}</pre> -->
 						<v-text-field 
-							:rules="emailRules"
 							label="email"
 							v-model.trim="email"
 							appendIcon="mdi-email-outline"
 							:color="baseColor"></v-text-field>
 						<v-text-field 
-							:rules="passRules"
 							label="password"
 							v-model.trim="password"
 							type="password"
 							appendIcon="mdi-keyboard-outline"
 							:color="baseColor"></v-text-field>
-						<v-text-field 
+						<!-- <v-text-field 
 							:rules="repassRules"
 							label="Repeatl password"
 							v-model.trim="repassword"
 							type="password"
 							appendIcon="mdi-repeat"
-							:color="baseColor"></v-text-field>							
+							:color="baseColor"></v-text-field>							 -->
 						<v-btn
 							outlined
 							@click="signUp"
 							class="white--text ml-0"
-							:disabled="this.isValidated"
+							
 							:color="baseColor">
 								<v-icon left>mdi-account-plus-outline</v-icon>
 								<span>add</span>						
@@ -49,8 +46,8 @@
 </template>
 
 <script>
-import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
-import { isEmpty } from 'lodash';
+// import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
+// import { isEmpty } from 'lodash';
 export default {
   data() {
     return {
@@ -60,49 +57,49 @@ export default {
       password: '',
       repassword: '',
 
-      nameRules: [
-        () => this.$v.name.required || 'Name is required',
-        () => this.$v.name.minLength || `Name must be more than ${this.$v.name.$params.minLength.min} characters`,
-        (v) => v.length <= 12 || 'Name must be less than 12 char ',
-      ],
-      emailRules: [
-        () => this.$v.email.required || 'E-mail is required',
-        () => this.$v.email.email || 'E-mail must be valid',
-      ],
-      passRules: [
-        () => this.$v.password.required || 'password is required',
-        () => this.$v.password.minLength || `password must be more than ${this.$v.password.$params.minLength.min} characters`,
-      ],
-      repassRules: [
-        () => this.$v.repassword.sameAsPassword || 'Passwords must be identical.'
-      ]
+      // nameRules: [
+      //   () => this.$v.name.required || 'Name is required',
+      //   () => this.$v.name.minLength || `Name must be more than ${this.$v.name.$params.minLength.min} characters`,
+      //   (v) => v.length <= 12 || 'Name must be less than 12 char ',
+      // ],
+      // emailRules: [
+      //   () => this.$v.email.required || 'E-mail is required',
+      //   () => this.$v.email.email || 'E-mail must be valid',
+      // ],
+      // passRules: [
+      //   () => this.$v.password.required || 'password is required',
+      //   () => this.$v.password.minLength || `password must be more than ${this.$v.password.$params.minLength.min} characters`,
+      // ],
+      // repassRules: [
+      //   () => this.$v.repassword.sameAsPassword || 'Passwords must be identical.'
+      // ]
     }
   },
   computed: {
     baseColor() {
       return 'blue'
     },
-    isValidated() {
-      return this.$v.$invalid
-    }
+    // isValidated() {
+    //   return this.$v.$invalid
+    // }
   },
-  validations: {
-    name: {
-      required,
-      minLength: minLength(4)
-    },
-    email: {
-      required,
-      email
-    },
-    password: {
-      required,
-      minLength: minLength(6)
-    },
-    repassword: {
-      sameAsPassword: sameAs('password')
-    }
-  },
+  // validations: {
+  //   name: {
+  //     required,
+  //     minLength: minLength(4)
+  //   },
+  //   email: {
+  //     required,
+  //     email
+  //   },
+  //   password: {
+  //     required,
+  //     minLength: minLength(6)
+  //   },
+  //   repassword: {
+  //     sameAsPassword: sameAs('password')
+  //   }
+  // },
   methods: {
     signUp() {
       this.$api.signUp({
