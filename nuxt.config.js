@@ -1,6 +1,13 @@
 const webpack = require('webpack')
 const colors = require('vuetify/es5/util/colors').default
 
+
+const globalCss = []
+
+if (process.env.NODE_ENV !== 'production') {
+  globalCss.push('@mdi/font/css/materialdesignicons.css')
+}
+
 module.exports = {
   srcDir: 'client/',
   buildDir: 'dist/client/',
@@ -64,11 +71,7 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: [
-    // 'normalize.css/normalize.css',
-    // 'element-ui/lib/theme-chalk/index.css',
-    // { src: '@/assets/styles/main.scss', lang: 'scss' }
-  ],
+  css: globalCss,
   /*
   ** Add element-ui in our app, see plugins/element-ui.js file
   */
