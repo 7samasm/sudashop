@@ -1,122 +1,112 @@
 <template>
-	<v-row justify="center">
-		<v-col md='6'>
-			<v-card>
-				<v-card-text>
-					<v-form>
-						<v-text-field 
-							ref="name"
-							label="username"
-							appendIcon="mdi-account-outline"
-							v-model.trim="name"
-							:color="baseColor"></v-text-field>
-							<!-- <pre>{{this.$v}}</pre> -->
-						<v-text-field 
-							label="email"
-							v-model.trim="email"
-							appendIcon="mdi-email-outline"
-							:color="baseColor"></v-text-field>
-						<v-text-field 
-							label="password"
-							v-model.trim="password"
-							type="password"
-							appendIcon="mdi-keyboard-outline"
-							:color="baseColor"></v-text-field>
-						<!-- <v-text-field 
-							:rules="repassRules"
-							label="Repeatl password"
-							v-model.trim="repassword"
-							type="password"
-							appendIcon="mdi-repeat"
-							:color="baseColor"></v-text-field>							 -->
-						<v-btn
-							outlined
-							@click="signUp"
-							class="white--text ml-0"
-							
-							:color="baseColor">
-								<v-icon left>mdi-account-plus-outline</v-icon>
-								<span>add</span>						
-							</v-btn>
-					</v-form>
-				</v-card-text>
-			</v-card>
-		</v-col>
-	</v-row>
+  <v-row justify="center">
+    <v-col md="6">
+      <v-card>
+        <v-card-text>
+          <validation-observer v-slot="{ invalid }">
+            <v-form>
+              <validation-provider rules="required|min:4|alpha_dash" name="username" v-slot="{ errors }">
+                <v-text-field
+                  :error-messages="errors"
+                  ref="name"
+                  label="username"
+                  appendIcon="mdi-account-outline"
+                  v-model.trim="name"
+                  :color="baseColor"
+                ></v-text-field>
+              </validation-provider>
+              <!-- <pre>{{this.$v}}</pre> -->
+              <validation-provider rules="required|email" name="email" v-slot="{ errors }">
+                <v-text-field
+                  :error-messages="errors"
+                  label="email"
+                  v-model.trim="email"
+                  appendIcon="mdi-email-outline"
+                  :color="baseColor"
+                ></v-text-field>
+              </validation-provider>
+
+              <validation-provider rules="required|min:6" v-slot="{ errors }" name="password" vid="confirmation">
+              <v-text-field
+                  :error-messages="errors"
+                  label="password"
+                  v-model.trim="password"
+                  type="password"
+                  appendIcon="mdi-keyboard-outline"
+                  :color="baseColor"
+                ></v-text-field>
+              </validation-provider>
+
+              <validation-provider rules="confirmed:confirmation" v-slot="{ errors }" name="repeatl password">
+                <v-text-field
+                  :error-messages="errors"
+                  label="Repeatl password"
+                  v-model.trim="repassword"
+                  type="password"
+                  appendIcon="mdi-repeat"
+                  :color="baseColor"
+                ></v-text-field>
+              </validation-provider>
+
+              <v-btn
+                :disabled="invalid || !isCompleted"
+                outlined
+                @click="signUp"
+                class="white--text ml-0"
+                :color="baseColor"
+              >
+                <v-icon left>mdi-account-plus-outline</v-icon>
+                <span>add</span>
+              </v-btn>
+            </v-form>
+          </validation-observer>
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
-// import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
-// import { isEmpty } from 'lodash';
+import { ValidationProvider, ValidationObserver } from "vee-validate";
 export default {
   data() {
     return {
       //models
-      name: '',
-      email: '',
-      password: '',
-      repassword: '',
-
-      // nameRules: [
-      //   () => this.$v.name.required || 'Name is required',
-      //   () => this.$v.name.minLength || `Name must be more than ${this.$v.name.$params.minLength.min} characters`,
-      //   (v) => v.length <= 12 || 'Name must be less than 12 char ',
-      // ],
-      // emailRules: [
-      //   () => this.$v.email.required || 'E-mail is required',
-      //   () => this.$v.email.email || 'E-mail must be valid',
-      // ],
-      // passRules: [
-      //   () => this.$v.password.required || 'password is required',
-      //   () => this.$v.password.minLength || `password must be more than ${this.$v.password.$params.minLength.min} characters`,
-      // ],
-      // repassRules: [
-      //   () => this.$v.repassword.sameAsPassword || 'Passwords must be identical.'
-      // ]
-    }
+      name: "",
+      email: "",
+      password: "",
+      repassword: "",
+    };
+  },
+  components: {
+    ValidationProvider,
+    ValidationObserver,
   },
   computed: {
     baseColor() {
-      return 'blue'
+      return "blue";
     },
-    // isValidated() {
-    //   return this.$v.$invalid
-    // }
+    isCompleted() {
+      return this.name && this.password && this.email && this.repassword;
+    },
   },
-  // validations: {
-  //   name: {
-  //     required,
-  //     minLength: minLength(4)
-  //   },
-  //   email: {
-  //     required,
-  //     email
-  //   },
-  //   password: {
-  //     required,
-  //     minLength: minLength(6)
-  //   },
-  //   repassword: {
-  //     sameAsPassword: sameAs('password')
-  //   }
-  // },
   methods: {
     signUp() {
-      this.$api.signUp({
-      	name     : this.name,
-      	email    : this.email, 
-      	password : this.password
-      })
-        .then(user => {
-        	console.log(user);
-          alert(`${user.data.name} has been added`)
-          this.$router.push('/admin/login')
+      this.$api
+        .signUp({
+          name: this.name,
+          email: this.email,
+          password: this.password,
         })
-    }
+        .then((user) => {
+          console.log(user);
+          alert(`${user.data.name} has been added`);
+          this.$router.push("/admin/login");
+        });
+    },
   },
   mounted() {
-    console.log(this)
-  }
-}
-
+    console.log(this);
+  },
+};
 </script>

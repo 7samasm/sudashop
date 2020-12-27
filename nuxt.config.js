@@ -41,6 +41,7 @@ module.exports = {
   ** Build config
   */
   build: {
+    transpile: ["vee-validate/dist/rules"],
     publicPath: '/hare/',
     extractCSS: true,
     babel: {
@@ -76,7 +77,7 @@ module.exports = {
   ** Add element-ui in our app, see plugins/element-ui.js file
   */
   plugins: [
-    '@/plugins/vuelidate',
+    '@/plugins/vee-validate',
     '@/plugins/api'
   ],
   buildModules: [
