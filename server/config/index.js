@@ -9,7 +9,7 @@ const {
 // dont forget to use Environment Variables in local machine or global
 
 const getDbConnectionString = () => {
-	if (getEnvironmentVariable('NODE_ENV') === 'production')
+	if (process.env.NODE_ENV === 'production')
 		return getGlobalDBUrl()
 	return getLocalDBUrl()
 }
