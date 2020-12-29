@@ -102,7 +102,7 @@ const emitErrors = (ctx,error) => {
 }
 
 const getEnvironmentVariable = variable => process.env[variable];
-const getGlobalDBUrl = () => `mongodb://${getEnvironmentVariable(consts.DB_USERNAME)}:${encodeURIComponent(getEnvironmentVariable(consts.DB_PASSWORD))}@ds257648.mlab.com:57648/${getEnvironmentVariable(consts.DB)}`
+const getGlobalDBUrl = () => `mongodb+srv://${getEnvironmentVariable(consts.DB_USERNAME)}:${getEnvironmentVariable(consts.DB_PASSWORD)}@cluster0.ldcad.mongodb.net/${getEnvironmentVariable(consts.DB)}?retryWrites=true&w=majority`
 const getLocalDBUrl = () => `mongodb://localhost:27017/${getEnvironmentVariable(consts.DB)}`
 
 module.exports = {
