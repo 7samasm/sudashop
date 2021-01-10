@@ -4,7 +4,7 @@
     <v-col md="7" v-if="prod.hasOwnProperty('title')">
       <!-- images card -->
       <v-card text>
-        <v-img :aspect-ratio="643/376" :src="`${url}/d.jpg`" alt=""></v-img>
+        <v-img :aspect-ratio="643 / 376" :src="`${url}/d.jpg`" alt=""></v-img>
       </v-card>
       <!-- images card -->
 
@@ -14,10 +14,10 @@
           <!-- informations tags -->
           <v-col sm="12">
             <v-row justify="center">
-              <v-col cols="6" lg="3" v-for="(info,key) of mapInfo" :key="key">
+              <v-col cols="6" lg="3" v-for="(info, key) of mapInfo" :key="key">
                 <div :class="info.classes + ' text-lg-center'">
-                  <v-icon small>{{info.icon}}</v-icon>
-                  <span class="grey--text caption">{{info.value}}</span>
+                  <v-icon small>{{ info.icon }}</v-icon>
+                  <span class="grey--text caption">{{ info.value }}</span>
                 </div>
               </v-col>
             </v-row>
@@ -27,14 +27,19 @@
           <!-- description -->
           <v-col sm="12">
             <section class="body-1">
-              {{prod.description}}
+              {{ prod.description }}
             </section>
           </v-col>
           <!-- description -->
 
           <!-- add to cart btn -->
           <v-col cols="12">
-            <v-btn text class='btn-req' v-if="isLoggedIn && prod.hasOwnProperty('title')" @click="dialog = true">
+            <v-btn
+              text
+              class="btn-req"
+              v-if="isLoggedIn && prod.hasOwnProperty('title')"
+              @click="dialog = true"
+            >
               <v-icon color="pink">mdi-cart-plus</v-icon>
               <span class="pink--text">add to cart</span>
             </v-btn>
@@ -43,19 +48,40 @@
 
           <!-- dialog  -->
           <v-col>
-            <v-dialog v-model="dialog" width="350" attach=".relative" class="absolute">
+            <v-dialog
+              v-model="dialog"
+              width="350"
+              attach=".relative"
+              class="absolute"
+            >
               <v-card>
-                <v-card-title class='font-weight-medium'>
+                <v-card-title class="font-weight-medium">
                   <v-icon small color="purple">mdi-tune</v-icon>
                   <span class="body-2 purple--text ml-1">options</span>
                 </v-card-title>
                 <v-card-text class="text-center">
-                  <v-text-field type="number" label="quantity" v-model="quantity" hint="example 10" prepend-icon="mdi-shape" color="pink"></v-text-field>
+                  <v-text-field
+                    type="number"
+                    label="quantity"
+                    v-model="quantity"
+                    hint="example 10"
+                    prepend-icon="mdi-shape"
+                    color="pink"
+                  ></v-text-field>
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn :loading="isSending" :disabled="!(quantity/1 > 0)" text class="ma-2 white--text" color="purple" @click="saveToCart(id,quantity/1)">
-                    <v-icon color="purple">mdi-checkbox-marked-circle-outline</v-icon>
+                  <v-btn
+                    :loading="isSending"
+                    :disabled="!(quantity / 1 > 0)"
+                    text
+                    class="ma-2 white--text"
+                    color="purple"
+                    @click="saveToCart(id, quantity / 1)"
+                  >
+                    <v-icon color="purple"
+                      >mdi-checkbox-marked-circle-outline</v-icon
+                    >
                     <span class="ml-1">Ok</span>
                   </v-btn>
                 </v-card-actions>
@@ -68,15 +94,15 @@
       <!-- content card-->
 
       <!-- comments -->
-      <commentsList/>
+      <commentsList />
       <!-- comments -->
     </v-col>
     <!-- main panel that grib cards and comments -->
-    
+
     <!-- side panels  -->
     <v-col cols="12" md="5" class="order-md-first">
-      <panelsList title="See also" :products="seeAlso.docs" class="mb-10"/>
-      <panelsList title="trend" :products="common"/>
+      <panelsList title="See also" :products="seeAlso.docs" class="mb-10" />
+      <panelsList title="trend" :products="common" />
     </v-col>
     <!-- side panels  -->
 
@@ -84,7 +110,15 @@
     <!--     <v-col v-else sm="7">
       <v-skeleton-loader :type="$vuetify.breakpoint.xs ? 'image,table-heading@4' : 'image@2,table-heading@4'"></v-skeleton-loader>
     </v-col> -->
-    <v-btn fab fixed bottom right elevation="3" color="white" :class="!$vuetify.breakpoint.xs ? 'left' : ''">
+    <v-btn
+      fab
+      fixed
+      bottom
+      right
+      elevation="3"
+      color="white"
+      :class="!$vuetify.breakpoint.xs ? 'left' : ''"
+    >
       <v-icon color="pink">mdi-share</v-icon>
     </v-btn>
   </v-row>
@@ -105,10 +139,10 @@ export default {
       quantity: ''
     }
   },
-  async fetch({store,$api,params}){
-    const {comments} = await $api.getProductById(params.product)
-    store.commit('SET_POST_COMMENTS',comments)
-  },
+  // async fetch({store,$api,params}){
+  //   const {comments} = await $api.getProductById(params.product)
+  //   store.commit('SET_POST_COMMENTS',comments)
+  // },
   data() {
     return {
       id: this.$route.params.product,
@@ -150,7 +184,7 @@ export default {
   },
   async created() {
     if (this.prod) {
-      // this.setComments(this.prod.comments)
+      this.$store.commit('SET_POST_COMMENTS',this.prod.comments)
       this.prod.price = this.$options.filters.currency(this.prod.price)
       const { price, section, userId } = this.prod
       this.mapInfo = [
@@ -170,7 +204,7 @@ export default {
 <style scoped>
 .left {
   /*left: 3.5rem;*/
-  bottom: 30px
+  bottom: 30px;
 }
 
 .btn-req {
@@ -210,5 +244,4 @@ p.sm-text {
 a {
   text-decoration: none;
 }
-
 </style>
