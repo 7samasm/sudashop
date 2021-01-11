@@ -28,11 +28,13 @@ exports.signUp = async (ctx, next) => {
 exports.login = async (ctx, next) => {
   try {
     await next()
-    const {request} = ctx
+    const {request,invalid} = ctx
     // get requested email and password
     const { email, password } = pick(request.body, ['email', 'password'])
+    // check if inputs are valid
+    if (invalid) throw new Error(invalid.body.msg.toString())
     // get user by requested email and check if its found
-    const user = await User.findOne({ email: email })
+    const user = await User.findOne({ email })
     if (!user) {
       const error = new Error('A user with this email could not be found.');
       error.statusCode = 401;

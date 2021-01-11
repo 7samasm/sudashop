@@ -78,7 +78,7 @@ export const actions = {
         commit('set_cart', await this.$api.getCart())
         resolve(true)   
       } catch(e) {
-        reject(e.response.data.error)
+        reject(e.response.data)
       }
     })
   }

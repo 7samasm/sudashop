@@ -85,6 +85,7 @@ export default {
           password: this.password,
         });
       } catch (e) {
+        console.log(e)
         // statements
         this.dialog = true;
         this.dialogText = e;

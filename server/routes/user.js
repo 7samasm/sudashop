@@ -75,9 +75,10 @@ router.route({
   validate: {
     body: {
       email : joi.string().lowercase().email().required(),
-      password : joi.string().max(100).required()
+      password : joi.string().max(100).min(6).required()
     },
     type : 'json',
+    continueOnError : true
   },
   handler : userController.login,
 })

@@ -14,7 +14,7 @@
           <!-- informations tags -->
           <v-col sm="12">
             <v-row justify="center">
-              <v-col cols="6" lg="3" v-for="(info, key) of mapInfo" :key="key">
+              <v-col cols="6" lg="3" v-for="(info, key) of quickInformations" :key="key">
                 <div :class="info.classes + ' text-lg-center'">
                   <v-icon small>{{ info.icon }}</v-icon>
                   <span class="grey--text caption">{{ info.value }}</span>
@@ -134,15 +134,11 @@ export default {
       prod    : await ctx.$api.getProductById(ctx.params.product),
       seeAlso : await ctx.$axios.$get('/hpi/products/?limit=3'),
       common  : await ctx.$axios.$get('/hpi/products/stats/common'),
-      mapInfo : [],
+      quickInformations : [],
       dialog  : false,
       quantity: ''
     }
   },
-  // async fetch({store,$api,params}){
-  //   const {comments} = await $api.getProductById(params.product)
-  //   store.commit('SET_POST_COMMENTS',comments)
-  // },
   data() {
     return {
       id: this.$route.params.product,
@@ -184,10 +180,12 @@ export default {
   },
   async created() {
     if (this.prod) {
+      // set comment store
       this.$store.commit('SET_POST_COMMENTS',this.prod.comments)
+      //  mutate price properity to have an currncey format 100 => 100.00 SDG
       this.prod.price = this.$options.filters.currency(this.prod.price)
       const { price, section, userId } = this.prod
-      this.mapInfo = [
+      this.quickInformations = [
         { value: price, icon: 'mdi-cash-usd-outline', classes: '' },
         { value: section, icon: 'mdi-shape', classes: 'pl-10 pl-lg-0' },
         { value: 'khartoum', icon: 'mdi-map-marker', classes: '' },
