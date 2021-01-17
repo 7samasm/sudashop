@@ -3,6 +3,7 @@ const chalk = require('chalk')
 const objectId = require('mongoose').Types.ObjectId
 const isValidObjectId = require('mongoose').isValidObjectId
 const emitErrors = require('../../utils/helpers').emitErrors
+const {uploadFile} = require('../../utils/uploadFile')
 const {setControllerPaginationLogic} = require('../products')
 
 
@@ -12,10 +13,9 @@ const User = require('../../models/user')
 exports.postAddProduct = async (ctx, next) => {
   const {request} = ctx
   const body = pick(request.body, ['title', 'price', 'description', 'imageUrl', 'section'])
-  // mutate image url with requsted uploded file if found
-  // if (req.file) body.imageUrl = req.file.filename
-  try {
+   try {
     await next()
+    await handleUpload(ctx, body)
     const product = new Product({
       ...body,
       userId: ctx.userId
@@ -34,8 +34,7 @@ exports.putEditProduct = async (ctx, next) => {
   const prodId = request.body.productId;
   try {
     await next()
-    // mutate image url with requsted uploded file if found
-    // if (req.file) body.imageUrl = req.file.filename
+    await handleUpload(ctx, body)
     const doc = await Product.findById(prodId)
     for (const prop in body) {
       doc.set(prop, body[prop])
@@ -43,7 +42,7 @@ exports.putEditProduct = async (ctx, next) => {
     const updatedDoc = await doc.save()
     ctx.status = 200
     ctx.body = updatedDoc
-    console.log(ctx.body)
+    // console.log(ctx.body)
 
   } catch (e) {
     emitErrors(ctx,e)
@@ -166,3 +165,17 @@ exports.userInfos = async (req, res, next) => {
     next(e)
   };
 };
+
+async function handleUpload(ctx, body) {
+  const file = ctx.request.files.image
+  if (file) {
+    const { key, url } = await uploadFile({
+      fileName: file.name,
+      filePath: file.path,
+      fileType: file.type,
+    })
+    console.log(key, url)
+    // mutate image url with requsted uploded file if found
+    if (url) body.imageUrl = url
+  }
+}

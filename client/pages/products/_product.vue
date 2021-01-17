@@ -4,7 +4,7 @@
     <v-col md="7" v-if="prod.hasOwnProperty('title')">
       <!-- images card -->
       <v-card text>
-        <v-img :aspect-ratio="643 / 376" :src="`${url}/d.jpg`" alt=""></v-img>
+        <v-img :aspect-ratio="643 / 376" :src="`${imageUrl(prod.imageUrl)}`" alt=""></v-img>
       </v-card>
       <!-- images card -->
 
@@ -127,6 +127,7 @@
 import { mapMutations, mapGetters } from 'vuex'
 import panelsList from '~/components/panel/panelsList'
 import commentsList from '~/components/comments/commentsList'
+import toggleImageUrl from '../../helper/gloalMixIns/toggleImageUrl.mixin';
 export default {
   async asyncData(ctx) {
     // console.log(ctx);
@@ -142,7 +143,6 @@ export default {
   data() {
     return {
       id: this.$route.params.product,
-      url : process.env.baseUrl,
       isSending: false
     }
   },
@@ -195,7 +195,8 @@ export default {
       this.$router.push('/')
     }
   },
-  components : {panelsList,commentsList}
+  components : {panelsList,commentsList},
+  mixins : [toggleImageUrl]
 }
 
 </script>

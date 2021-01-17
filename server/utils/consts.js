@@ -12,7 +12,7 @@ const LB_ADDR = process.env.LB_ADDR || `http://${HOST}:${PORT}/hpi`
 
 // OPTIONS
 
-const _12_ROW_PER_PAGE = 6
+const _12_ROW_PER_PAGE = 12
 
 // envs
 

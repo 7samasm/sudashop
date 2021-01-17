@@ -3,7 +3,6 @@
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 const koaJoyRouter = require('koa-joi-router')
 const isAuth = require('../middlewares/routes_middlewares/isAuth')
-const uploadMiddlewere = require('../middlewares/routes_middlewares/uploadMiddlewere')
 const consts = require('../utils/consts')
 const {userController} = require('../controllers/user')
 

@@ -14,7 +14,7 @@
             <v-col cols="2" class="py-1 hidden-sm-and-down">
               <!-- http://localhost:3001 https://shop-spa-test.herokuapp.com -->
               <v-avatar size="50px" class='ml-2'>
-                <v-img :src="`${url}/d.jpg`" alt="" class="avatar"></v-img>
+                <v-img :src="`${imageUrl(item.imageUrl)}`" alt="" class="avatar"></v-img>
               </v-avatar>
             </v-col>
             <v-col class="py-1 text-center" :cols="toggleAutoGrid">
@@ -79,6 +79,8 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import toggleImageUrlMixin from '../../../helper/gloalMixIns/toggleImageUrl.mixin'
+import toggleImageUrl from '../../../helper/gloalMixIns/toggleImageUrl.mixin'
 export default {
   name : 'cart',
 	middleware: ['auth'],
@@ -100,7 +102,8 @@ export default {
     ...mapActions({
       removeCartItem : 'user/removeCartItem'
     })
-  }
+  },
+  mixins : [toggleImageUrl]
 }
 
 </script>
