@@ -73,6 +73,7 @@ export const actions = {
     try {
       const comment = await this.$api.addComment(commentObject)
       commit('ADD_COMMENT', comment)
+      return true
     }catch (e) {
       console.log(e)
     }

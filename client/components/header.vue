@@ -1,16 +1,16 @@
 <template>
   <nav>
-    <v-toolbar color="indigo lighten-2" elevation="2">
-      <v-btn class="white--text" icon @click="openDrawer(true)">
+    <v-toolbar color="white" elevation="0">
+      <v-btn class="indigo--text" icon @click="openDrawer(true)">
         <v-icon>mdi-menu</v-icon>
       </v-btn>
-      <v-toolbar-title class="white--text">{{toolbarTitle}}</v-toolbar-title>
+      <v-toolbar-title class="indigo--text">{{toolbarTitle}}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
 
         <v-tooltip bottom>
           <template v-slot:activator="{on}">
-            <v-btn  text to="/" class="white--text hidden-sm-and-down" v-on="on">
+            <v-btn  text to="/" class="indigo--text hidden-sm-and-down" v-on="on">
               <v-icon>mdi-home</v-icon>
             </v-btn>
           </template>
@@ -19,7 +19,7 @@
 
         <v-tooltip bottom v-if="isLoggedIn">
           <template v-slot:activator="{on}">
-            <v-btn  text v-on="on" to="/admin/my-product" class="white--text hidden-sm-and-down">
+            <v-btn  text v-on="on" to="/admin/my-product" class="indigo--text hidden-sm-and-down">
               <v-icon>mdi-briefcase</v-icon>
             </v-btn>
           </template>
@@ -28,7 +28,7 @@
 
         <v-tooltip bottom v-if="isLoggedIn">
           <template v-slot:activator="{on}">
-            <v-btn text small v-on="on" class="white--text" to="/admin/add-product" activeClass="false">
+            <v-btn text small v-on="on" class="indigo--text" to="/admin/add-product" activeClass="false">
               <v-icon>mdi-plus</v-icon>
             </v-btn>
           </template>
@@ -40,7 +40,7 @@
             <v-btn text small v-on="on" to="/admin/cart">
               <v-badge color="red" :value="totalCartItems > 0">
                 <template v-slot:badge>{{totalCartItems}}</template>
-                <v-icon color="white">mdi-cart</v-icon>
+                <v-icon color="indigo">mdi-cart</v-icon>
               </v-badge>
             </v-btn>
           </template>

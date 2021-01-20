@@ -1,5 +1,5 @@
 <template>
-  <v-card  class="mb-2">
+  <v-card  class="mb-2 comment">
     <v-card-title class="body-2 py-2">
       <v-row>
         <v-col class="py-1">
@@ -29,5 +29,6 @@ export default {
 }
 </script>
 <style>
+   div.v-card.comment {border-radius: 15px !important;}
   .justify {text-align: justify !important;}
 </style>

@@ -3,16 +3,16 @@
 
     <v-col v-if="totalPrice > 0" cols="12" class="pt-0">
       <h2 class="subtitle-1">
-        <v-icon>mdi-format-list-bulleted-square</v-icon> cart items
+        <v-icon color="grey lighten-1">mdi-format-list-bulleted-square</v-icon>
+        <span class="grey--text">cart items</span>
       </h2>
     </v-col>
 
     <v-col cols="12" class="py-0" v-for="(item,index) in cart" :key="index">
       <nuxt-link :to="'/products/' + item._id" tag="a">
-        <v-card class="cart-item">
+        <v-card class="cart-item" v-ripple="{ class: 'indigo--text' }" elevation="3">
           <v-row align="center">
             <v-col cols="2" class="py-1 hidden-sm-and-down">
-              <!-- http://localhost:3001 https://shop-spa-test.herokuapp.com -->
               <v-avatar size="50px" class='ml-2'>
                 <v-img :src="`${imageUrl(item.imageUrl)}`" alt="" class="avatar"></v-img>
               </v-avatar>
@@ -34,7 +34,7 @@
               	:fab="!isMobile" 
               	:class="isMobile ? 'dBlock' : 'float-right mr-2'" 
               	@click.prevent="removeCartItem(item._id)">
-                <v-icon color="#FF5049">mdi-delete-outline</v-icon>
+                <v-icon color="#FF5049">mdi-delete</v-icon>
               </v-btn>
             </v-col>
           </v-row>
@@ -44,7 +44,8 @@
 
     <v-col v-if="totalPrice > 0" cols="12" class="pb-0 mt-5">
       <h2 class="subtitle-1">
-        <v-icon>mdi-sigma</v-icon> total price
+        <v-icon color="grey lighten-1">mdi-sigma</v-icon>
+        <span class="grey--text body-2">total price</span>
       </h2>
     </v-col>
 
@@ -114,9 +115,10 @@ export default {
     text-decoration: none
   }
 	.cart-item {
-		border-radius: 0 !important;
-		margin-bottom: 1px
-	}
+    border-radius: 27px !important;
+    margin-bottom: 11px;
+    padding: 0 15px;
+}
 	.avatar {
 		width: 50%
 	}

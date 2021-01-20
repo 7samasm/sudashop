@@ -11,7 +11,7 @@
         :items="comboboxItems"
       >
         <template v-slot:item="{ item, on }">
-          <v-list-item v-on="on" dense>
+          <v-list-item v-on="on" dense v-ripple="{ class: 'indigo--text' }">
             <v-list-item-content>
               <v-list-item-title class="caption font-weight-regular">{{
                 item.text

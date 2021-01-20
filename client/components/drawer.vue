@@ -23,14 +23,14 @@
 
         <v-list-item v-for="item in items" :to="item.link" :key="item.key">
           <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon color="grey">{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         
-        <v-list-group color="black"  prepend-icon="mdi-format-list-bulleted-square">
+        <v-list-group color="black">
           <template v-slot:activator>
             <v-list-item-title>Sections</v-list-item-title>
           </template>
@@ -63,7 +63,7 @@ export default {
         {
           key : 0,
           title: 'Home',
-          icon: 'mdi-home-outline',
+          icon: 'mdi-home',
           link: '/',
           render: true
         },
@@ -77,7 +77,7 @@ export default {
         {
           key : 2,
           title: 'My Products',
-          icon: 'mdi-briefcase-outline',
+          icon: 'mdi-briefcase',
           link: '/admin/my-product',
           render: this.isLoggedIn
         }

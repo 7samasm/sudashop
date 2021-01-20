@@ -19,9 +19,11 @@ const setControllerPaginationLogic = async (ctx, paginateQuery = {},postedQuerie
   if (postedQueries) {
     query = postedQueries
   } 
-  const sort = {};
-  if (query.sortBy && query.orderBy)
+  const sort = {createdAt : -1};
+  if (query.sortBy && query.orderBy){
+    delete sort['createdAt']
     sort[query.sortBy] = query.orderBy === 'desc' ? -1 : 1;
+  }
   const result = await Product.paginate(paginateQuery,
     {
       sort,

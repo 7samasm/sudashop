@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card :loading="btnLoading">
     <v-dialog v-model="dialog" width="400">
       <v-card>
         <v-card-title class="font-weight-medium"> Tip : </v-card-title>

@@ -1,13 +1,13 @@
 {
   "name": "Sudashop",
-  "version": "1.0.0-alpha.0",
-  "description": "Based on Vue.js 2.x, Koa 2.x, vuetify-UI and Nuxt.js",
+  "version": "1.0.0",
+  "description": "Based on Vue.js , Koa 2.x, vuetify-UI and Nuxt.js",
   "author": "7sam",
   "license": "MIT",
   "main": "dist/server-app.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/clarkdo/hare.git"
+    "url": "git+https://github.com/7samasm/sudashop.git"
   },
   "scripts": {
     "dev": "cross-env DEBUG=nuxt:* nodemon -w server -w nuxt.config.js server/app.js",

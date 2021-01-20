@@ -49,10 +49,16 @@ productSchema.pre('remove', async function(next) {
   try {
     // statements
     const id = this._id
+    // remove product from all carts
     let users = await mongoose.models['User'].find({ "cart.productId": id })
     users.forEach(user => {
       user.removeFromCart(id)
     });
+    // remove comments
+    this.comments.forEach(async comment => {
+      await mongoose.models['Comment'].findByIdAndRemove(comment)
+    })
+    this.comments = []
     next()
   } catch (e) {
     // statements

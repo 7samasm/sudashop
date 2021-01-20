@@ -62,7 +62,7 @@ module.exports = {
   /*
   ** Customize the Progress Bar
   */
-  loading: { color: '#ffffff', height: '2px' },
+  loading: { color: '#3f51b5', height: '2px' },
   /*
   ** Generate config
   */
