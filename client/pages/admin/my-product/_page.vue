@@ -1,14 +1,14 @@
 <template>
   <div>
     <custom-dialog
+      title="Warnnig !"
       :visible="dialogActive"
-      title="Hint"
-      message="are you sure ?"
+      :message="`you want delete ${slotData.title} ?`"
+      :loading-right-btn="loadingRightDialogBtn"
       @close="dialogActive = false"
       @leftHasClicked="dialogActive = false"
       @rightHasClicked="
         removeProduct({
-          title : slotData.title,
           ajaxPayload: {
             productId: slotData.id,
             page: $route.params.page,
@@ -23,8 +23,8 @@
     >
       <!-- slot to inject to cards -->
       <template v-slot="{ title, id }">
-        <v-btn text outlined small color="red" class="ml-2" @click.prevent="openDialog(id,title)">
-          <v-icon>mdi-delete-outline</v-icon>
+        <v-btn text outlined small color="grey darken-5" class="ml-2" @click.prevent="openDialog(id,title)">
+          <v-icon>mdi-delete</v-icon>
         </v-btn>
 
         <v-btn
@@ -32,7 +32,7 @@
           outlined
           small
           ripple
-          color="amber darken-1"
+          color="grey darken-5"
           class="float-right mr-2"
           @click.prevent="$router.push('/admin/edit-product/' + id)"
         >

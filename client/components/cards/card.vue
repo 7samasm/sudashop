@@ -18,9 +18,9 @@
         </div>
       </v-col>
       <v-col cols="12" sm="12">
-        <h3 class="title text-truncate">{{ prod.title }}</h3>
-        <div class="desc text-truncate">{{ prod.description }}</div>
-        <div class="price text-center grey--text pa-1 font-weight-bold">
+        <p class="title text-truncate text-center subtitle-1 px-4  grey--text text--darken-2">{{ prod.title }}</p>
+        <div class="text-truncate text-center grey--text body-1 px-4 pb-4">{{ prod.description }}</div>
+        <div class="price text-truncate text-center grey--text px-4 subtitle-2 font-weight-bold">
           {{ prod.price | currency }}
         </div>
       </v-col>
@@ -46,16 +46,5 @@ export default {
   width: 70%;
   margin: 0 auto;
   display: block;
-}
-
-h3.title {
-  text-align: center;
-  padding: 5px 15px;
-}
-
-.desc {
-  padding: 0 2rem;
-  padding-bottom: 2rem;
-  color: #888;
 }
 </style>

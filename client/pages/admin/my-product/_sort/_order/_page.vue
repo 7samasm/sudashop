@@ -1,14 +1,14 @@
 <template>
   <div>
     <custom-dialog
+      title="Warnnig !"
       :visible="dialogActive"
-      title="Hint"
-      message="are you sure ?"
+      :message="`you want delete ${slotData.title} ?`"
+      :loading-right-btn="loadingRightDialogBtn"
       @close="dialogActive = false"
       @leftHasClicked="dialogActive = false"
       @rightHasClicked="
         removeProduct({
-          title: slotData.title,
           ajaxPayload: {
             productId: slotData.id,
             sortBy: $route.params.sort,
@@ -33,7 +33,7 @@
           class="ml-2"
           @click.prevent="openDialog(id, title)"
         >
-          <v-icon>mdi-delete-outline</v-icon>
+          <v-icon>mdi-delete</v-icon>
         </v-btn>
 
         <v-btn

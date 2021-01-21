@@ -12,13 +12,11 @@ export const state = () => ({
   [PRODUCTS]: [],
   [PAGINATION]: {},
   postComments: [],
-  drawer: false
 })
 
 export const getters = {
   [PRODUCTS]: state => state[PRODUCTS],
   postComments: state => state.postComments,
-  isDrawerOpen: state => state.drawer,
   isLoggedIn: state => state.auth.loggedIn,
   user: state => state.auth.user
 }
@@ -36,12 +34,6 @@ export const mutations = {
   ADD_COMMENT(state,comment){
     state.postComments.push(comment)
   },
-  // DELETE_PRODUCT(state,comment){
-  //   state.postComments.push(comment)
-  // },
-  set_drawer(state, v) {
-    state.drawer = v
-  }
 }
 
 export const actions = {
@@ -69,13 +61,15 @@ export const actions = {
       return copyData
     }()))
   },
-  async addComment({ commit }, commentObject) {
-    try {
-      const comment = await this.$api.addComment(commentObject)
-      commit('ADD_COMMENT', comment)
-      return true
-    }catch (e) {
-      console.log(e)
-    }
+  addComment({ commit }, commentObject) {
+    return new Promise(async (resolve,reject)=>{
+      try {
+        const comment = await this.$api.addComment(commentObject)
+        commit('ADD_COMMENT', comment)
+        resolve(true)
+      }catch (e) {
+        reject(e)
+      }
+    })
   }
 };

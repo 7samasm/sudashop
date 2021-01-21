@@ -15,11 +15,14 @@
       <v-row dense class="flex-column" align="center">
         <v-col sm="11">
           <v-textarea
-            v-model="commentText"
+            v-model.trim="commentText"
             rowHeight="5"
             label="your Comment ..."
             color="teal"
             flat
+            clearable
+            clear-icon="mdi-delete"
+            auto-grow
           ></v-textarea>
         </v-col>
         <v-col sm="11">
@@ -27,7 +30,7 @@
             text
             outlined
             color="teal"
-            :disabled="!isLoggedIn"
+            :disabled="!isLoggedIn || isCommentTextEmpty"
             :loading="loading"
             @click="insertComment"
             class="mb-2 float-right"
@@ -55,20 +58,30 @@ export default {
     ...mapGetters({
       isLoggedIn: "isLoggedIn",
     }),
+    isCommentTextEmpty() {
+      const length = this.commentText ? this.commentText.length : 0
+      return length < 1
+    }
   },
   methods: {
     ...mapActions({
       addComment: "addComment",
     }),
     async insertComment() {
-      this.loading = true;
-      const payload = {
-        productId: this.id,
-        commentText: this.commentText,
-      };
-      const isAdded = await this.addComment(payload);
-      this.commentText = "";
-      this.loading = !isAdded;
+      try {
+        this.loading = true;
+        const payload = {
+          productId: this.id,
+          commentText: this.commentText,
+        };
+        const isAdded = await this.addComment(payload);
+        this.commentText = "";
+      } catch (error) {
+        alert(error.message.toString())
+      }
+      finally {
+        this.loading = false;
+      }
     },
   },
 };

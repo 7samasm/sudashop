@@ -1,5 +1,5 @@
 <template>
-  <v-dialog  width="400" v-model="show">
+  <v-dialog  width="400" v-model="show" persistent>
     <v-card>
       <v-card-title class="font-weight-medium">{{title}}</v-card-title>
       <v-card-text class="text-center">
@@ -8,6 +8,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn
+          v-if="!hideLeftButton"
           small
           class="ma-2"
           color="red"
@@ -21,6 +22,7 @@
           color="teal"
           text
           @click="$emit('rightHasClicked')"
+          :loading="loadRightBtn"
           >Ok</v-btn
         >
       </v-card-actions>
@@ -30,7 +32,30 @@
 
 <script>
 export default {
-  props : ['visible','title','message'],
+  // props : ['visible','title','message','loadingRightBtn'],
+  props: {
+    visible : {
+      required : true,
+      type : Boolean,
+    },
+    title : {
+      required : true,
+      type : String,
+    },
+    message : {
+      required : true,
+      type : String,
+    },
+    loadingRightBtn : {
+      type : Boolean,
+      required : false
+    },
+    hideLeftBtn : {
+      type : Boolean,
+      required : false,
+      default : false
+    }
+  },
   computed : {
     show : {
       get() {
@@ -41,6 +66,12 @@ export default {
           this.$emit('close')
         }
       }
+    },
+    loadRightBtn(){
+      return this.loadingRightBtn || false
+    },
+    hideLeftButton(){
+      return this.hideLeftBtn
     }
   }
 };

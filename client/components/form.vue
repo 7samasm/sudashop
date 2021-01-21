@@ -1,34 +1,12 @@
 <template>
   <v-card :loading="btnLoading">
-    <v-dialog v-model="dialog" width="400">
-      <v-card>
-        <v-card-title class="font-weight-medium"> Tip : </v-card-title>
-        <v-card-text class="text-center">
-          {{ dialogText }}
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            small
-            class="ma-2"
-            color="red"
-            text
-            @click="$router.push('/admin/my-product')"
-            >{{ editable ? "OK" : "NO" }}</v-btn
-          >
-          <v-btn
-            small
-            class="ma-2 white--text"
-            :color="baseColor"
-            text
-            v-if="!this.editable"
-            @click="addAnthor"
-            >Ok</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
+    <custom-dialog
+      title="Tip"
+      :message="dialogText"
+      :visible="dialog"
+      :hideLeftBtn="editable"
+      @leftHasClicked="$router.push('/admin/my-product')"
+      @rightHasClicked="whenRightDialogBtnPressed"></custom-dialog>
     <v-card-text>
       <validation-observer v-slot="{ invalid }">
         <v-form ref="form">
@@ -82,7 +60,6 @@
               :error-messages="errors"
               label="Section"
               v-model="section"
-              @change="log"
               :items="mapSections"
             ></v-autocomplete>
           </validation-provider>
@@ -134,6 +111,7 @@
 <script>
 import { mapMutations, mapGetters } from "vuex";
 import { ValidationProvider, ValidationObserver } from "vee-validate";
+import CustomDialog from "./ui/dialog";
 export default {
   props: ["editable", "productId"],
   data() {
@@ -169,8 +147,12 @@ export default {
       setMyProd: "user/set_my_products",
       setCart: "user/set_cart",
     }),
-    log() {
-      console.log(this.section);
+    whenRightDialogBtnPressed() {
+      if (this.editable) {
+        this.$router.push('/admin/my-product')
+        return
+      }
+      this.addAnthor()
     },
     addAnthor() {
       this.$refs.form.reset();
@@ -223,6 +205,7 @@ export default {
   components: {
     ValidationProvider,
     ValidationObserver,
+    CustomDialog
   },
   async created() {
     if (this.editable) {

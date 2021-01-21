@@ -1,19 +1,12 @@
 <template>
   <v-row row justify="center" class="mt-5">
-    <v-dialog v-model="dialog" width="400">
-      <v-card>
-        <v-card-title class="font-weight-medium red--text">
-          <v-icon large color="red">mdi-alert-circle</v-icon> Error
-        </v-card-title>
-        <v-card-text class="text-center">
-          {{ dialogText }}
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn outlined color="teal" text @click="dialog = false"> ok </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <custom-dialog
+      title="Error"
+      hideLeftBtn
+      :message="dialogText"
+      :visible="dialog"
+      @rightHasClicked="dialog = false"
+    ></custom-dialog>
     <v-col sm="6" md="4">
       <!-- 			<v-card>
 				<v-card-text> -->
@@ -64,6 +57,7 @@
 
 <script>
 import { ValidationProvider, ValidationObserver } from "vee-validate";
+import CustomDialog from '../../../components/ui/dialog'
 export default {
   data() {
     return {
@@ -76,6 +70,7 @@ export default {
   components: {
     ValidationProvider,
     ValidationObserver,
+    CustomDialog
   },
   methods: {
     async login() {

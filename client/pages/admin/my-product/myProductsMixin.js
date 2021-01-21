@@ -13,6 +13,7 @@ export default {
   data() {
     return {
       dialogActive: false,
+      loadingRightDialogBtn : false,
       slotData : {
         id : '',
         title : ''
@@ -36,6 +37,9 @@ export default {
       deleteProduct: 'user/deleteProduct'
     }),
     async removeProduct(payload) {
+      // load dialog btn to prevent multi requests and improve ux
+      this.loadingRightDialogBtn = true
+      // store delete dispatching
       const metaData = await this.deleteProduct(payload);
       if (metaData) {
         if (metaData.isPageParamGreaterThanTotalPages) {
@@ -44,6 +48,8 @@ export default {
         }
         this.$store.dispatch(SET_DATA_AND_PAGINATION, metaData.paginationData);
       }
+      //  hide dialog and stop its btn loading
+      this.loadingRightDialogBtn = false
       this.dialogActive = false
     },
     openDialog(id,title){

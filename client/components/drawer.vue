@@ -1,6 +1,6 @@
 <template>
   <v-layout wrap style="height: 100%;">
-    <v-navigation-drawer :value="isDrawerOpen" @input="$store.commit('set_drawer',$event)" fixed temporary>
+    <v-navigation-drawer v-model="show" fixed temporary>
       
       <v-list-item>
         <v-list-item-avatar>
@@ -30,7 +30,7 @@
           </v-list-item-content>
         </v-list-item>
         
-        <v-list-group color="black">
+        <v-list-group color="grey" prepend-icon="mdi-view-list">
           <template v-slot:activator>
             <v-list-item-title>Sections</v-list-item-title>
           </template>
@@ -48,6 +48,12 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
+  props : {
+    visible : {
+      type : Boolean,
+      required : true
+    }
+  },
   computed: {
     ...mapGetters({
       isLoggedIn : 'isLoggedIn',
@@ -82,7 +88,17 @@ export default {
           render: this.isLoggedIn
         }
       ].filter(item => item.render)
-    }
+    },
+    show : {
+      get() {
+        return this.visible
+      },
+      set(value) {
+        if (!value) {
+          this.$emit('close')
+        }
+      }
+    },
   },
   methods: {
     async logout() {

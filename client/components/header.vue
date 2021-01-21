@@ -1,7 +1,7 @@
 <template>
   <nav>
     <v-toolbar color="white" elevation="0">
-      <v-btn class="indigo--text" icon @click="openDrawer(true)">
+      <v-btn class="indigo--text" icon @click="openDrawer = true">
         <v-icon>mdi-menu</v-icon>
       </v-btn>
       <v-toolbar-title class="indigo--text">{{toolbarTitle}}</v-toolbar-title>
@@ -49,7 +49,7 @@
 
       </v-toolbar-items>
     </v-toolbar>
-    <drawer></drawer>
+    <drawer :visible="openDrawer" @close="openDrawer = false"></drawer>
   </nav>
 </template>
 <script>
@@ -57,6 +57,11 @@ import drawer from '~/components/drawer';
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  data(){
+    return {
+      openDrawer : false
+    }
+  },
   computed: {
     ...mapGetters({
       totalCartItems: 'user/totalCartItems',
@@ -75,11 +80,6 @@ export default {
   },
   components: {
     drawer,
-  },
-  methods: {
-    openDrawer(v) {
-      this.$store.commit('set_drawer', v);
-    }
   }
 }
 

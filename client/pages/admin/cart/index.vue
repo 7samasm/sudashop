@@ -1,9 +1,15 @@
 <template>
   <v-row v-if="cart">
-
+    <v-overlay :value="loading" opacity="0.19">
+      <v-progress-circular
+        color="indigo"
+        indeterminate
+        size="64"
+      ></v-progress-circular>
+    </v-overlay>
     <v-col v-if="totalPrice > 0" cols="12" class="pt-0">
       <h2 class="subtitle-1">
-        <v-icon color="grey lighten-1">mdi-format-list-bulleted-square</v-icon>
+        <v-icon color="grey lighten-1">mdi-segment</v-icon>
         <span class="grey--text">cart items</span>
       </h2>
     </v-col>
@@ -33,7 +39,7 @@
               	:text="isMobile" 
               	:fab="!isMobile" 
               	:class="isMobile ? 'dBlock' : 'float-right mr-2'" 
-              	@click.prevent="removeCartItem(item._id)">
+              	@click.prevent="deleteCartItem(item._id)">
                 <v-icon color="#FF5049">mdi-delete</v-icon>
               </v-btn>
             </v-col>
@@ -84,7 +90,12 @@ import toggleImageUrlMixin from '../../../helper/gloalMixIns/toggleImageUrl.mixi
 import toggleImageUrl from '../../../helper/gloalMixIns/toggleImageUrl.mixin'
 export default {
   name : 'cart',
-	middleware: ['auth'],
+  middleware: ['auth'],
+  data(){
+    return {
+      loading : false
+    }
+  },
   computed: {
     ...mapGetters({
       cart          : 'user/cart',
@@ -102,7 +113,16 @@ export default {
   methods: {
     ...mapActions({
       removeCartItem : 'user/removeCartItem'
-    })
+    }),
+    async deleteCartItem(id){
+      try {
+        this.loading = true
+        await this.removeCartItem(id)
+        this.loading = false
+      } catch (error) {
+        console.log(error)
+      }
+    }
   },
   mixins : [toggleImageUrl]
 }
