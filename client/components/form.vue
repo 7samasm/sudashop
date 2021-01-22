@@ -6,7 +6,8 @@
       :visible="dialog"
       :hideLeftBtn="editable"
       @leftHasClicked="$router.push('/admin/my-product')"
-      @rightHasClicked="whenRightDialogBtnPressed"></custom-dialog>
+      @rightHasClicked="whenRightDialogBtnPressed"
+    ></custom-dialog>
     <v-card-text>
       <validation-observer v-slot="{ invalid }">
         <v-form ref="form">
@@ -80,27 +81,14 @@
           </validation-provider>
           <v-btn
             :disabled="invalid || !isCompleted"
-            outlined
-            v-if="editable"
             :loading="btnLoading"
-            @click="editProduct"
-            class="white--text ml-0"
             :color="baseColor"
-          >
-            <v-icon left>mdi-square-edit-outline</v-icon>
-            <span>edit</span>
-          </v-btn>
-          <v-btn
-            :disabled="invalid || !isCompleted"
-            :loading="btnLoading"
             outlined
-            v-else
-            @click="addProduct"
+            @click="sendForm"
             class="white--text ml-0"
-            :color="baseColor"
           >
             <v-icon left>mdi-checkbox-marked-circle-outline</v-icon>
-            <span>add</span>
+            <span>{{ btnText }}</span>
           </v-btn>
         </v-form>
       </validation-observer>
@@ -133,7 +121,9 @@ export default {
   computed: {
     baseColor() {
       return this.editable ? "amber" : "teal";
-      console.log("computed called");
+    },
+    btnText() {
+      return this.editable ? "edit" : "add";
     },
     mapSections() {
       return this.$store.getters["user/mapSections"];
@@ -149,10 +139,10 @@ export default {
     }),
     whenRightDialogBtnPressed() {
       if (this.editable) {
-        this.$router.push('/admin/my-product')
-        return
+        this.$router.push("/admin/my-product");
+        return;
       }
-      this.addAnthor()
+      this.addAnthor();
     },
     addAnthor() {
       this.$refs.form.reset();
@@ -172,40 +162,33 @@ export default {
       if (this.image) formData.append("image", this.image, this.image.name);
       return formData;
     },
-    async addProduct() {
+    async sendForm() {
       this.btnLoading = true;
       try {
-        const resp = await this.$api.insertProduct(this.makeFormData());
+        if (this.editable) {
+          const res = await this.$api.editProduct(this.makeFormData("productId"));
+          this.dialogText = `${res.data.title} has been updated successflly!`;
+          // rest vuex state
+          const cart = await this.$api.getCart();
+          this.$store.commit("user/set_cart", cart);
+        } else {
+          const res = await this.$api.insertProduct(this.makeFormData());
+          this.dialogText = `${res.data.title} hass been added successflly do you want to add anthor product ?`;
+        }
+      } catch (e) {
+        console.log(e);
+        this.dialogText = e.message.toString();
+      } finally {
         this.$refs.form.reset();
         this.btnLoading = false;
-        this.dialogText = `${resp.data.title} hass been added successflly do you want to add anthor product ?`;
         this.dialog = true;
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    async editProduct() {
-      this.btnLoading = true;
-      try {
-        const res = await this.$api.editProduct(this.makeFormData("productId"));
-        // rest vuex state
-        const cart = await this.$api.getCart();
-        this.$store.commit("user/set_cart", cart);
-        setTimeout(() => {
-          this.$refs.form.reset();
-          this.btnLoading = false;
-          this.dialogText = `${res.data.title} has been updated successflly!`;
-          this.dialog = true;
-        }, 500);
-      } catch (e) {
-        console.log(e);
       }
     },
   },
   components: {
     ValidationProvider,
     ValidationObserver,
-    CustomDialog
+    CustomDialog,
   },
   async created() {
     if (this.editable) {
@@ -221,7 +204,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$store);
     // add foucs to title
     this.$refs.title.focus();
   },

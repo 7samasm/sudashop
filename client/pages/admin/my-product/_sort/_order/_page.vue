@@ -27,9 +27,8 @@
       <template v-slot="{ title, id }">
         <v-btn
           text
-          outlined
           small
-          color="red"
+          color="grey darken-1"
           class="ml-2"
           @click.prevent="openDialog(id, title)"
         >
@@ -38,10 +37,9 @@
 
         <v-btn
           text
-          outlined
           small
           ripple
-          color="amber darken-1"
+          color="grey darken-1"
           class="float-right mr-2"
           @click.prevent="$router.push('/admin/edit-product/' + id)"
         >

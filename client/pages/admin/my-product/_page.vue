@@ -23,16 +23,21 @@
     >
       <!-- slot to inject to cards -->
       <template v-slot="{ title, id }">
-        <v-btn text outlined small color="grey darken-5" class="ml-2" @click.prevent="openDialog(id,title)">
+        <v-btn
+          text
+          small
+          color="grey darken-1"
+          class="ml-2"
+          @click.prevent="openDialog(id, title)"
+        >
           <v-icon>mdi-delete</v-icon>
         </v-btn>
 
         <v-btn
           text
-          outlined
           small
           ripple
-          color="grey darken-5"
+          color="grey darken-1"
           class="float-right mr-2"
           @click.prevent="$router.push('/admin/edit-product/' + id)"
         >
