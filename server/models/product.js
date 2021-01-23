@@ -73,5 +73,13 @@ productSchema.methods.addToComments = function (comment) {
   this.comments = commentsCopy
   return this.save()
 }
-
+productSchema.methods.removeComment = function (id) {
+  const commentsCopy = [...this.comments]
+  const filtered = commentsCopy.filter((comment,index) => {
+    console.log(comment)
+    return comment._id.toString() !== id
+  })
+  this.comments = filtered
+  return this.save()
+}
 module.exports = mongoose.model('Product', productSchema);

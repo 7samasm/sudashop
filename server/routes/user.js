@@ -26,6 +26,7 @@ router.delete('/cart/:productId',isAuth,userController.deleteCartItem)
 
 //comments
 router.post('/comment',isAuth,userController.postComment)
+router.post('/delete-comment',isAuth,userController.removeComment)
 
 // products
 

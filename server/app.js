@@ -2,6 +2,8 @@ const Koa = require('koa')
 const { Nuxt, Builder } = require('nuxt')
 const chalk = require('chalk')
 const proxy = require('koa-proxies')
+require('dotenv').config()
+
 const config = require('../nuxt.config.js')
 const useMiddlewares = require('./middlewares')
 const useRoutes = require('./routes')
@@ -59,7 +61,7 @@ async function start() {
 
   // centerlize errors
   app.on('error',(e,ctx)=>{
-    console.log(e.message)
+    console.log(e)
   })
 
   //conect to db

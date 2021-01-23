@@ -32,3 +32,29 @@ exports.postComment = async (ctx, next) => {
   }
 
 }
+
+exports.removeComment = async (ctx, next) => {
+  try {
+    await next()
+    const {request,req} = ctx
+    // get commentId and userId inputs
+    console.log(request.body)
+    const {productId,commentId} = request.body
+    const userId = req.userId
+    // check if userId equal to hardcoded userId
+    if (userId === '5f9fc117d63f480e8fdc7a0e') {
+      // find related post
+      const post = await Product.findById(productId)
+      // remove comment from it
+      await post.removeComment(commentId)
+      // remove comment from db by geted id
+      const deletedDocumment = await Comment.findByIdAndRemove(commentId)
+      // send deleted doc to response 
+      ctx.body = deletedDocumment
+    } else {
+      throw new Error('no userId matched')
+    }
+  } catch (error) {
+    emitErrors(ctx,error)
+  }
+}

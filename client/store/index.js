@@ -34,6 +34,11 @@ export const mutations = {
   ADD_COMMENT(state,comment){
     state.postComments.push(comment)
   },
+  REMOVE_COMMENT(state,id) {
+    const copiedComments = [...state.postComments]
+    const filtered = copiedComments.filter(el => el._id !== id)
+    state.postComments = filtered
+  }
 }
 
 export const actions = {
@@ -69,6 +74,18 @@ export const actions = {
         resolve(true)
       }catch (e) {
         reject(e)
+      }
+    })
+  },
+  removeComment({commit},{productId,commentId}) {
+    return new Promise(async (resolve,resject)=>{
+      try {
+        const comment = await this.$api.deleteComment({productId,commentId})
+        // console.log(comment)
+        commit('REMOVE_COMMENT',comment._id)
+        resolve(comment)
+      } catch (error) {
+        resject(error)
       }
     })
   }

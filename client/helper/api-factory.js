@@ -53,5 +53,6 @@ export default axios => ({
   // comment
   addComment({productId,commentText}){
     return axios.$post('/hpi/admin/comment', {productId,commentText})
-  }
+  },
+  deleteComment : ({productId,commentId}) => axios.$post('/hpi/admin/delete-comment',{productId,commentId})
 })

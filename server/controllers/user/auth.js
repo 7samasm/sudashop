@@ -73,7 +73,7 @@ exports.getUser = async (ctx,next) => {
   try {
     await next()
     const {req} = ctx
-    const user = await User.findOne({ _id: req.userId }, 'name email');
+    const user = await User.findOne({ _id: req.userId }, 'name email status');
     ctx.status = 200
     ctx.body = {user}
   } catch (error) {

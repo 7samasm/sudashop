@@ -16,6 +16,11 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  status : {
+    type : String,
+    enum : ['ADMIN','USER'],
+    default : 'USER'
+  },
   cart: [
     {
       productId: {

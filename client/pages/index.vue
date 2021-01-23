@@ -8,7 +8,7 @@ export default {
   async fetch({ params, store, $api }) {
     console.log('hi')
     const data = await $api.fetchProducts()
-    console.log(data)
+    console.log(process.env['DB_USERNAME'])
     store.dispatch(SET_DATA_AND_PAGINATION, data)
   },
   mixins : [cardListMixin] 
