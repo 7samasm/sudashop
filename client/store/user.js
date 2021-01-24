@@ -29,7 +29,7 @@ export const mutations = {
 };
 
 export const actions = {
-  async deleteProduct({ commit, dispatch }, payload) {
+  async deleteProduct({ commit }, payload) {
     const { ajaxPayload } = payload
     // delete product from ui
     // dispatch(DELETE_PRODUCT,id,{root:true});

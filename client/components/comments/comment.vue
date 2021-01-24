@@ -24,7 +24,7 @@
         text
         color="red"
         @click="
-          removeComment({
+          deleteComment({
             productId: $route.params.product,
             commentId: comment._id,
           })
@@ -45,7 +45,6 @@ export default {
       user: "user",
     }),
     isAdmin() {
-      console.log(this.user.status);
       return this.user.status === "ADMIN";
     },
     url: (_) => process.env.baseUrl,
@@ -54,6 +53,17 @@ export default {
     ...mapActions({
       removeComment: "removeComment",
     }),
+    async deleteComment(payload) {
+      try {
+        this.$emit("deleteCommentDidStart");
+        await this.removeComment(payload);
+      } catch (error) {
+        alert(error.message.toString());
+      }
+    },
+  },
+  destroyed() {
+    this.$emit("deleteCommentDidFinish");
   },
 };
 </script>

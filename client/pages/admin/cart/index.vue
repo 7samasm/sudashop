@@ -1,12 +1,6 @@
 <template>
   <v-row v-if="cart">
-    <v-overlay :value="loading" opacity="0.19">
-      <v-progress-circular
-        color="indigo"
-        indeterminate
-        size="64"
-      ></v-progress-circular>
-    </v-overlay>
+    <custom-overlay :isLoading="loading"></custom-overlay>
     <v-col v-if="totalPrice > 0" cols="12" class="pt-0">
       <h2 class="subtitle-1">
         <v-icon color="grey lighten-1">mdi-segment</v-icon>
@@ -86,6 +80,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import CustomOverlay from "~/components/ui/overlay";
 import toggleImageUrlMixin from '../../../helper/gloalMixIns/toggleImageUrl.mixin'
 import toggleImageUrl from '../../../helper/gloalMixIns/toggleImageUrl.mixin'
 export default {
@@ -124,7 +119,8 @@ export default {
       }
     }
   },
-  mixins : [toggleImageUrl]
+  mixins : [toggleImageUrl],
+  components : {CustomOverlay}
 }
 
 </script>

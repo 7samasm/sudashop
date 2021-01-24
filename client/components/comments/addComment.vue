@@ -1,12 +1,5 @@
 <template>
   <div>
-    <v-overlay :value="loading" opacity="0.19">
-      <v-progress-circular
-        color="indigo"
-        indeterminate
-        size="64"
-      ></v-progress-circular>
-    </v-overlay>
     <h3 class="body-1 my-4">
       <v-icon class="pa-1">mdi-message-text-outline</v-icon>
       add Comment
@@ -59,9 +52,9 @@ export default {
       isLoggedIn: "isLoggedIn",
     }),
     isCommentTextEmpty() {
-      const length = this.commentText ? this.commentText.length : 0
-      return length < 1
-    }
+      const length = this.commentText ? this.commentText.length : 0;
+      return length < 1;
+    },
   },
   methods: {
     ...mapActions({
@@ -69,18 +62,18 @@ export default {
     }),
     async insertComment() {
       try {
+        this.$emit("addCommentDidStart");
         this.loading = true;
         const payload = {
           productId: this.id,
           commentText: this.commentText,
         };
-        const isAdded = await this.addComment(payload);
+        await this.addComment(payload);
         this.commentText = "";
-      } catch (error) {
-        alert(error.message.toString())
-      }
-      finally {
+        this.$emit("addCommentDidFinish");
         this.loading = false;
+      } catch (error) {
+        alert(error.message.toString());
       }
     },
   },
