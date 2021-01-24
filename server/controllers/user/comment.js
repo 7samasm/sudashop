@@ -42,7 +42,7 @@ exports.removeComment = async (ctx, next) => {
     const {productId,commentId} = request.body
     const userId = req.userId
     // check if userId equal to hardcoded userId
-    if (userId === '5f9fc117d63f480e8fdc7a0e') {
+    if (userId === process.env['ADMIN_MDB_ID']) {
       // find related post
       const post = await Product.findById(productId)
       // remove comment from it
