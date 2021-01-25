@@ -17,6 +17,7 @@
             v-slot="{ errors }"
           >
             <v-text-field
+              @keydown.enter="sendForm(invalid)"
               :error-messages="errors"
               ref="title"
               label="title"
@@ -32,6 +33,7 @@
             v-slot="{ errors }"
           >
             <v-text-field
+              @keydown.enter="sendForm(invalid)"
               :error-messages="errors"
               label="description"
               v-model="description"
@@ -71,6 +73,7 @@
             v-slot="{ errors }"
           >
             <v-text-field
+              @keydown.enter="sendForm(invalid)"
               :error-messages="errors"
               label="price"
               v-model="price"
@@ -84,7 +87,7 @@
             :loading="btnLoading"
             :color="baseColor"
             outlined
-            @click="sendForm"
+            @click="sendForm(invalid)"
             class="white--text ml-0"
           >
             <v-icon left>mdi-checkbox-marked-circle-outline</v-icon>
@@ -162,7 +165,8 @@ export default {
       if (this.image) formData.append("image", this.image, this.image.name);
       return formData;
     },
-    async sendForm() {
+    async sendForm(invalid) {
+      if (invalid || !this.isCompleted) return
       this.btnLoading = true;
       try {
         if (this.editable) {

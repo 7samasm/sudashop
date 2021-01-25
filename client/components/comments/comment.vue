@@ -16,7 +16,9 @@
         </v-col>
       </v-row>
     </v-card-title>
-    <v-card-text class="justify">{{ comment.commentText }}</v-card-text>
+    <v-card-text class="justify text-wrap">{{
+      comment.commentText
+    }}</v-card-text>
     <v-card-actions v-if="isAdmin">
       <v-spacer />
       <v-btn
@@ -67,11 +69,14 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 div.v-card.comment {
   border-radius: 15px !important;
 }
 .justify {
   text-align: justify !important;
+}
+.text-wrap {
+  white-space: break-spaces !important;
 }
 </style>
