@@ -4,7 +4,17 @@
     <v-col md="7" v-if="prod.hasOwnProperty('title')">
       <!-- images card -->
       <v-card text>
-        <v-img :aspect-ratio="643 / 376" :src="`${imageUrl(prod.imageUrl)}`" alt=""></v-img>
+        <v-carousel hide-delimiters progress-color="indigo">
+          <v-carousel-item class="pt-14"> 
+            <v-img
+              class="img"
+              contain
+              :aspect-ratio="1"
+              :src="`${imageUrl(prod.imageUrl)}`"
+              alt=""
+            ></v-img>
+          </v-carousel-item>
+        </v-carousel>
       </v-card>
       <!-- images card -->
 
@@ -14,7 +24,12 @@
           <!-- informations tags -->
           <v-col sm="12">
             <v-row justify="center">
-              <v-col cols="6" lg="3" v-for="(info, key) of quickInformations" :key="key">
+              <v-col
+                cols="6"
+                lg="3"
+                v-for="(info, key) of quickInformations"
+                :key="key"
+              >
                 <div :class="info.classes + ' text-lg-center'">
                   <v-icon small>{{ info.icon }}</v-icon>
                   <span class="grey--text caption">{{ info.value }}</span>
@@ -124,81 +139,80 @@
   </v-row>
 </template>
 <script>
-import { mapMutations, mapGetters } from 'vuex'
-import panelsList from '~/components/panel/panelsList'
-import commentsList from '~/components/comments/commentsList'
-import toggleImageUrl from '../../helper/gloalMixIns/toggleImageUrl.mixin';
+import { mapMutations, mapGetters } from "vuex";
+import panelsList from "~/components/panel/panelsList";
+import commentsList from "~/components/comments/commentsList";
+import toggleImageUrl from "../../helper/gloalMixIns/toggleImageUrl.mixin";
 export default {
   async asyncData(ctx) {
     // console.log(ctx);
     return {
-      prod    : await ctx.$api.getProductById(ctx.params.product),
-      seeAlso : await ctx.$axios.$get('/hpi/products/?limit=3'),
-      common  : await ctx.$axios.$get('/hpi/products/stats/common'),
-      quickInformations : [],
-      dialog  : false,
-      quantity: ''
-    }
+      prod: await ctx.$api.getProductById(ctx.params.product),
+      seeAlso: await ctx.$axios.$get("/hpi/products/?limit=3"),
+      common: await ctx.$axios.$get("/hpi/products/stats/common"),
+      quickInformations: [],
+      dialog: false,
+      quantity: "",
+    };
   },
   data() {
     return {
       id: this.$route.params.product,
-      isSending: false
-    }
+      isSending: false,
+    };
   },
   head() {
     return {
-      title: this.prod.title
-    }
+      title: this.prod.title,
+    };
   },
   computed: {
     ...mapGetters({
-      isLoggedIn: 'isLoggedIn'
-    })
+      isLoggedIn: "isLoggedIn",
+    }),
   },
   methods: {
     ...mapMutations({
-      setCart: 'user/set_cart',
-      setComments : 'SET_POST_COMMENTS'
+      setCart: "user/set_cart",
+      setComments: "SET_POST_COMMENTS",
     }),
     async saveToCart(id, quantity) {
       // disable btn and make it rotate
-      this.isSending = true
+      this.isSending = true;
       try {
         // insert product to cart
-        await this.$api.insertCartItem(id, quantity)
+        await this.$api.insertCartItem(id, quantity);
         // update total cart's items to update header badge num
-        this.setCart(await this.$api.getCart())
+        this.setCart(await this.$api.getCart());
         // make btn work again
-        this.isSending = false
-        this.dialog = false
-        this.quantity = ''
+        this.isSending = false;
+        this.dialog = false;
+        this.quantity = "";
       } catch (e) {
         console.log(e.message);
       }
-    }
+    },
   },
   async created() {
     if (this.prod) {
       // set comment store
-      this.$store.commit('SET_POST_COMMENTS',this.prod.comments)
+      this.$store.commit("SET_POST_COMMENTS", this.prod.comments);
       //  mutate price properity to have an currncey format 100 => 100.00 SDG
-      this.prod.price = this.$options.filters.currency(this.prod.price)
-      const { price, section, userId } = this.prod
+      this.prod.price = this.$options.filters.currency(this.prod.price);
+      const { price, section, userId } = this.prod;
       this.quickInformations = [
-        { value: price, icon: 'mdi-cash-usd-outline', classes: '' },
-        { value: section, icon: 'mdi-shape', classes: 'pl-10 pl-lg-0' },
-        { value: 'khartoum', icon: 'mdi-map-marker', classes: '' },
-        { value: '0991255456', icon: 'mdi-phone', classes: 'pl-10 pl-lg-0' },
-      ]
+        { value: price, icon: "mdi-cash-usd-outline", classes: "" },
+        { value: section, icon: "mdi-shape", classes: "pl-10 pl-lg-0" },
+        { value: "khartoum", icon: "mdi-map-marker", classes: "" },
+        { value: "0991255456", icon: "mdi-phone", classes: "pl-10 pl-lg-0" },
+      ];
     } else {
-      this.$router.push('/')
+      this.$router.push("/");
     }
   },
-  components : {panelsList,commentsList},
-  mixins : [toggleImageUrl]
-}
-
+  components: { panelsList, commentsList },
+  mixins: [toggleImageUrl],
+};
 </script>
 <style scoped>
 .left {
@@ -242,5 +256,9 @@ p.sm-text {
 
 a {
   text-decoration: none;
+}
+.img {
+  width: 50%;
+  margin: 0 auto;
 }
 </style>

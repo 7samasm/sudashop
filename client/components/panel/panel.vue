@@ -7,14 +7,15 @@
   >
     <v-row align="center">
       <v-col cols="3" class="py-6">
-        <!-- <v-avatar size="70px" class='ml-4'> -->
+        <v-avatar size="70px" class='ml-4'>
         <v-img
           :src="`${imageUrl(product.imageUrl)}`"
           alt=""
-          :aspect-ratio="643 / 376"
+          contain
+          :aspect-ratio="1"
           class="ml-2 img"
         ></v-img>
-        <!-- </v-avatar> -->
+        </v-avatar>
       </v-col>
       <v-col cols="9">
         <p class="body-2 pr-4 text-justify">
