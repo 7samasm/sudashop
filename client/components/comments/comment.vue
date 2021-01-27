@@ -47,7 +47,7 @@ export default {
       user: "user",
     }),
     isAdmin() {
-      return this.user.status === "ADMIN";
+      return this.user ? this.user.status === "ADMIN" : false
     },
     url: (_) => process.env.baseUrl,
   },

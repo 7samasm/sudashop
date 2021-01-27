@@ -1,7 +1,7 @@
 <template>
   <v-card :loading="btnLoading">
     <custom-dialog
-      title="Tip"
+      :title="dialogTitle"
       :message="dialogText"
       :visible="dialog"
       :hideLeftBtn="editable"
@@ -44,6 +44,7 @@
 
           <v-file-input
             dense
+            show-size
             prepend-icon=""
             v-model="image"
             clear-icon="mdi-close-circle-outline"
@@ -118,6 +119,7 @@ export default {
       product: {},
       dialog: false,
       dialogText: "",
+      dialogTitle : 'Tip',
       btnLoading: false,
     };
   },
@@ -180,8 +182,8 @@ export default {
           this.dialogText = `${res.data.title} hass been added successflly do you want to add anthor product ?`;
         }
       } catch (e) {
-        console.log(e);
-        this.dialogText = e.message.toString();
+        this.dialogTitle = 'Error'
+        this.dialogText = e.response.data;
       } finally {
         this.$refs.form.reset();
         this.btnLoading = false;

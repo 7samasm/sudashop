@@ -61,7 +61,7 @@ async function start() {
 
   // centerlize errors
   app.on('error',(e,ctx)=>{
-    console.log(e)
+    console.log(e.message)
   })
 
   //conect to db

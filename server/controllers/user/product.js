@@ -166,16 +166,31 @@ exports.userInfos = async (req, res, next) => {
   };
 };
 
-async function handleUpload(ctx, body) {
-  const file = ctx.request.files.image
-  if (file) {
-    const { key, url } = await uploadFile({
-      fileName: file.name,
-      filePath: file.path,
-      fileType: file.type,
-    })
-    console.log(key, url)
-    // mutate image url with requsted uploded file if found
-    if (url) body.imageUrl = url
-  }
+function handleUpload(ctx, body) {
+  return new Promise(async (resolve,reject) => {
+    try {
+      const file = ctx.request.files.image
+      if (file) {
+        const {name,path,type,size} = file
+        console.log(type,size,typeof type);
+        if (type !== 'image/jpeg' && type !== 'image/png') {
+          throw new Error('only support png,jpeg and jpg')
+        }
+        if (size > 99999) {
+          throw new Error('too big image size')
+        }
+        const { key, url } = await uploadFile({
+          fileName: name,
+          filePath: path,
+          fileType: type,
+        })
+        console.log(key, url)
+        // mutate image url with requsted uploded file if found
+        if (url) body.imageUrl = url
+      } 
+      resolve(true)
+    } catch (e) {
+      reject(e)
+    }
+  })
 }
