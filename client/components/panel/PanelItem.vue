@@ -29,11 +29,6 @@
 import toggleImageUrl from "../../helper/gloalMixIns/toggleImageUrl.mixin";
 export default {
   props: ["product"],
-  data() {
-    return {
-      url: process.env.baseUrl,
-    };
-  },
   mixins: [toggleImageUrl],
 };
 </script>

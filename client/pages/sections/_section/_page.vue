@@ -1,27 +1,33 @@
 <template>
-  <cardsList :products="prods" :cb-path="path" :pagination="pagination"/>
+  <card-list
+    :products="prods"
+    :cb-path="path"
+    :pagination="pagination"
+  ></card-list>
 </template>
 <script>
-import { SET_DATA_AND_PAGINATION } from '~/store'
-import cardListMixin from '~/helper/cardListMixin'
+import { SET_DATA_AND_PAGINATION } from "~/store";
+import cardListMixin from "~/helper/cardListMixin";
+import CardList from "../../../components/cards/CardList.vue";
 export default {
-  async fetch({ $api, params ,store}) {
+  components: { CardList },
+  async fetch({ $api, params, store }) {
     const data = await $api.fetchProducts(
-      {page : params.page},
+      { page: params.page },
       `/hpi/products/section/${params.section}/`
-    )
-    store.dispatch(SET_DATA_AND_PAGINATION,data)
+    );
+    store.dispatch(SET_DATA_AND_PAGINATION, data);
   },
-  computed : {
+  computed: {
     path() {
       return {
-        name : "sections/section/sort/order/page",
-        params : {
-          section : this.$route.params.section
-        }
-      }
+        name: "sections/section/sort/order/page",
+        params: {
+          section: this.$route.params.section,
+        },
+      };
     },
   },
-  mixins : [cardListMixin]
-}
+  mixins: [cardListMixin],
+};
 </script>

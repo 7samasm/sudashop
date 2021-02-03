@@ -11,27 +11,27 @@
       type="warning"
       >there are no comments to show</v-alert
     >
-    <comment
+    <comment-item
       v-else
       v-for="(comment, key) in postComments"
       :key="key"
       class="mb-2"
       :comment="comment"
-      @deleteCommentDidStart="dialogLoading = true"
-      @deleteCommentDidFinish="dialogLoading = false"
-    />
-    <addComment
-      @addCommentDidStart="dialogLoading = true"
-      @addCommentDidFinish="dialogLoading = false"
-    />
+      @delete-comment-started="dialogLoading = true"
+      @delete-comment-finshed="dialogLoading = false"
+    ></comment-item>
+    <comment-add
+      @add-comment-started="dialogLoading = true"
+      @add-comment-finshed="dialogLoading = false"
+    ></comment-add>
   </section>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import comment from "~/components/comments/comment";
-import addComment from "~/components/comments/addComment";
-import CustomOverlay from "~/components/ui/overlay";
+import CommentItem from "~/components/comments/CommentItem";
+import CommentAdd from "~/components/comments/CommentAdd";
+import CustomOverlay from "~/components/ui/CustomOverlay";
 export default {
   data() {
     return {
@@ -41,6 +41,6 @@ export default {
   computed: {
     ...mapGetters(["postComments"]),
   },
-  components: { comment, addComment, CustomOverlay },
+  components: { CommentItem, CommentAdd, CustomOverlay },
 };
 </script>

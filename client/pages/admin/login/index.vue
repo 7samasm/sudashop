@@ -57,7 +57,7 @@
 
 <script>
 import { ValidationProvider, ValidationObserver } from "vee-validate";
-import CustomDialog from '../../../components/ui/dialog'
+import CustomDialog from '../../../components/ui/CustomDialog'
 export default {
   data() {
     return {

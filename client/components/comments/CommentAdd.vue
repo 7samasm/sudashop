@@ -62,7 +62,7 @@ export default {
     }),
     async insertComment() {
       try {
-        this.$emit("addCommentDidStart");
+        this.$emit("add-comment-started");
         this.loading = true;
         const payload = {
           productId: this.id,
@@ -70,7 +70,7 @@ export default {
         };
         await this.addComment(payload);
         this.commentText = "";
-        this.$emit("addCommentDidFinish");
+        this.$emit("add-comment-finshed");
         this.loading = false;
       } catch (error) {
         alert(error.message.toString());

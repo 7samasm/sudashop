@@ -57,7 +57,7 @@ export default {
     }),
     async deleteComment(payload) {
       try {
-        this.$emit("deleteCommentDidStart");
+        this.$emit("delete-comment-started");
         await this.removeComment(payload);
       } catch (error) {
         alert(error.message.toString());
@@ -65,7 +65,7 @@ export default {
     },
   },
   destroyed() {
-    this.$emit("deleteCommentDidFinish");
+    this.$emit("delete-comment-finshed");
   },
 };
 </script>

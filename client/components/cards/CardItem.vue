@@ -8,13 +8,13 @@
   >
     <v-row>
       <v-col cols="12" sm="12" class="pb-0">
-        <slot />
+        <slot></slot>
         <div class="card-img mt-3">
           <v-img
             contain
             class="img"
             :aspect-ratio="1"
-            :src="`${imageUrl(prod.imageUrl)}`"
+            :src="`${imageUrl(product.imageUrl)}`"
           ></v-img>
         </div>
       </v-col>
@@ -22,15 +22,15 @@
         <p
           class="title text-truncate text-center subtitle-1 px-4 grey--text text--darken-2"
         >
-          {{ prod.title }}
+          {{ product.title }}
         </p>
         <div class="text-truncate text-center grey--text body-1 px-4 pb-4">
-          {{ prod.description }}
+          {{ product.description }}
         </div>
         <div
           class="price text-truncate text-center grey--text px-4 subtitle-2 font-weight-bold"
         >
-          {{ prod.price | currency }}
+          {{ product.price | currency }}
         </div>
       </v-col>
     </v-row>
@@ -41,12 +41,6 @@
 import toggleImage from "../../helper/gloalMixIns/toggleImageUrl.mixin";
 export default {
   props: ["product"],
-  computed: {
-    prod() {
-      // console.log('computed called!')
-      return this.product;
-    },
-  },
   mixins: [toggleImage],
 };
 </script>

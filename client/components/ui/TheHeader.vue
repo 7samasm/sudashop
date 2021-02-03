@@ -49,11 +49,11 @@
 
       </v-toolbar-items>
     </v-toolbar>
-    <drawer :visible="openDrawer" @close="openDrawer = false"></drawer>
+    <the-drawer :visible="openDrawer" @close="openDrawer = false"></the-drawer>
   </nav>
 </template>
 <script>
-import drawer from '~/components/drawer';
+import TheDrawer from '~/components/ui/TheDrawer';
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -79,7 +79,7 @@ export default {
     }
   },
   components: {
-    drawer,
+    TheDrawer,
   }
 }
 

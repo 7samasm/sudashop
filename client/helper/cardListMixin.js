@@ -1,4 +1,4 @@
-import cardsList from '~/components/cards/cardsList'
+import CardList from '~/components/cards/CardList'
 import {PAGINATION,PRODUCTS} from '~/store'
 
 export default {
@@ -12,5 +12,5 @@ export default {
       return this.$store.state[PAGINATION];
     }
   },
-  components: { cardsList }
+  components: { CardList }
 }

@@ -103,7 +103,7 @@
 <script>
 import { mapMutations, mapGetters } from "vuex";
 import { ValidationProvider, ValidationObserver } from "vee-validate";
-import CustomDialog from "./ui/dialog";
+import CustomDialog from "./CustomDialog";
 export default {
   props: ["editable", "productId"],
   data() {
@@ -179,11 +179,13 @@ export default {
           this.$store.commit("user/set_cart", cart);
         } else {
           const res = await this.$api.insertProduct(this.makeFormData());
+          this.dialogTitle = 'Tip'
           this.dialogText = `${res.data.title} hass been added successflly do you want to add anthor product ?`;
         }
       } catch (e) {
+        const errorMessage = e.response.data
         this.dialogTitle = 'Error'
-        this.dialogText = e.response.data;
+        this.dialogText =  this.editable ? errorMessage : errorMessage + ' do you want to retry ?';
       } finally {
         this.$refs.form.reset();
         this.btnLoading = false;

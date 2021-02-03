@@ -1,23 +1,19 @@
 <template>
   <v-app>
-    <appHeader/>
-
+    <the-header></the-header>
     <v-main>
       <v-container>
-        <nuxt/>
+        <nuxt />
       </v-container>
     </v-main>
-
   </v-app>
 </template>
 <script>
-
-import appHeader from '~/components/header';
+import TheHeader from "~/components/ui/TheHeader";
 
 export default {
   components: {
-    appHeader,
+    TheHeader,
   },
-}
-
+};
 </script>

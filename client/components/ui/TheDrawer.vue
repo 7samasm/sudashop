@@ -4,7 +4,7 @@
       
       <v-list-item>
         <v-list-item-avatar>
-          <img src="../static/logo.png">
+          <img src="../../static/logo.png">
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title>{{username}}</v-list-item-title>
@@ -30,12 +30,12 @@
           </v-list-item-content>
         </v-list-item>
         
-        <v-list-group color="grey" prepend-icon="mdi-view-list">
-          <template v-slot:activator>
+        <v-list-group color="grey" prepend-icon="mdi-view-list" value="true">
+          <template #activator>
             <v-list-item-title>Sections</v-list-item-title>
           </template>
-          <v-list-item v-for="sect in sections" :to="'/sections/' + sect.name" :key="sect._id" class="pl-10">
-            <v-list-item-subtitle>{{ sect.name }}</v-list-item-subtitle>
+          <v-list-item v-for="section in sections" :to="'/sections/' + section.name" :key="section._id" class="pl-10">
+            <v-list-item-subtitle>{{ section.name }}</v-list-item-subtitle>
           </v-list-item>
         </v-list-group>
 

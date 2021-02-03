@@ -2,17 +2,17 @@
 	<v-row justify="center">
 		<v-col cold="12" md="6">
 			<h2 class="main-text">add product</h2>
-			<formTemplate/>			
+			<product-form></product-form>	
 		</v-col>
 	</v-row>
 </template>
 
 <script>
-import formTemplate from '~/components/form';
+import ProductForm from '~/components/ui/ProductForm';
 export default {
 	middleware: ['auth'],
 	components : {
-		formTemplate
+		ProductForm
 	}
 }
 </script>

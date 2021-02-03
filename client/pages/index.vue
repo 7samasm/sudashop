@@ -1,17 +1,19 @@
 <template>
-  <cardsList :products="prods" :pagination="pagination" :cb-path="{name : 'sort/order/page'}"/>
+  <card-list
+    :products="prods"
+    :pagination="pagination"
+    :cb-path="{ name: 'sort/order/page' }"
+  ></card-list>
 </template>
 <script>
-import cardListMixin from '~/helper/cardListMixin'
-import { SET_DATA_AND_PAGINATION } from '~/store'
+import cardListMixin from "~/helper/cardListMixin";
+import { SET_DATA_AND_PAGINATION } from "~/store";
 export default {
   async fetch({ params, store, $api }) {
-    console.log('hi')
-    const data = await $api.fetchProducts()
-    console.log(process.env['DB_USERNAME'])
-    store.dispatch(SET_DATA_AND_PAGINATION, data)
+    console.log("hi");
+    const data = await $api.fetchProducts();
+    store.dispatch(SET_DATA_AND_PAGINATION, data);
   },
-  mixins : [cardListMixin] 
-}
-
+  mixins: [cardListMixin],
+};
 </script>

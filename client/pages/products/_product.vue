@@ -109,15 +109,15 @@
       <!-- content card-->
 
       <!-- comments -->
-      <commentsList />
+      <comment-list></comment-list>
       <!-- comments -->
     </v-col>
     <!-- main panel that grib cards and comments -->
 
     <!-- side panels  -->
     <v-col cols="12" md="5" class="order-md-first">
-      <panelsList title="See also" :products="seeAlso.docs" class="mb-10" />
-      <panelsList title="trend" :products="common" />
+      <PanelList title="See also" :products="seeAlso.docs" class="mb-10" />
+      <PanelList title="trend" :products="common" />
     </v-col>
     <!-- side panels  -->
 
@@ -140,8 +140,8 @@
 </template>
 <script>
 import { mapMutations, mapGetters } from "vuex";
-import panelsList from "~/components/panel/panelsList";
-import commentsList from "~/components/comments/commentsList";
+import PanelList from "~/components/panel/PanelList";
+import CommentList from "~/components/comments/CommentList";
 import toggleImageUrl from "../../helper/gloalMixIns/toggleImageUrl.mixin";
 export default {
   async asyncData(ctx) {
@@ -210,7 +210,7 @@ export default {
       this.$router.push("/");
     }
   },
-  components: { panelsList, commentsList },
+  components: { PanelList, CommentList },
   mixins: [toggleImageUrl],
 };
 </script>

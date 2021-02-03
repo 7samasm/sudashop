@@ -1,7 +1,10 @@
 <template>
   <v-row dense>
     <v-col cols="12">
-      <settings :cbPath="cbPath" :totalDocs="pagination.totalDocs" />
+      <card-list-settings
+        :cbPath="cbPath"
+        :totalDocs="pagination.totalDocs"
+      ></card-list-settings>
     </v-col>
     <v-col
       v-for="(prod, key) in products"
@@ -11,9 +14,9 @@
       md="2"
     >
       <nuxt-link :to="'/products/' + prod._id" tag="a" :key="key">
-        <card :product="prod">
+        <card-item :product="prod">
           <slot :id="prod._id" :title="prod.title"></slot>
-        </card>
+        </card-item>
       </nuxt-link>
     </v-col>
     <v-col cols="12" v-if="products.length > 0">
@@ -36,9 +39,10 @@
 
 
 <script>
-import card from "~/components/cards/card";
-import settings from "~/components/cards/settings";
+import CardItem from "~/components/cards/CardItem";
+import CardListSettings from "~/components/cards/CardListSettings";
 import urlsParser from "~/helper/urlParser";
+
 const urlParser = urlsParser;
 
 export default {
@@ -55,7 +59,7 @@ export default {
       this.$router.push(`${url}/${num}`);
     },
   },
-  components: { card, settings },
+  components: { CardItem, CardListSettings },
 };
 </script>
 

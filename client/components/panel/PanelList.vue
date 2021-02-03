@@ -2,18 +2,18 @@
   <div>
     <h4 class="body-2 mb-3 pink--text">{{title}} :</h4>
     <nuxt-link v-for="(product,key) in products" :key="key" :to="'/products/' + product._id" tag="a">
-      <Panel :product="product"/>
+      <PanelItem :product="product"/>
     </nuxt-link>
   </div>
 </template>
 <script>
-import Panel from './panel.vue'
+import PanelItem from './PanelItem'
 export default {
   props: {
     products: { type: Array, required: true },
     title: { type: String, default: 'list' }
   },
-  components : {Panel}
+  components : {PanelItem}
 }
 
 </script>
