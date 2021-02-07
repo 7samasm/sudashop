@@ -1,5 +1,5 @@
 const webpack = require('webpack')
-const colors = require('vuetify/es5/util/colors').default
+const {default:colors} = require('vuetify/es5/util/colors')
 
 
 const globalCss = []

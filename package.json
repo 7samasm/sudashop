@@ -33,6 +33,7 @@
     ]
   },
   "dependencies": {
+    "@koa/cors": "^3.1.0",
     "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/axios": "^5.4.1",
     "@nuxtjs/moment": "^1.6.1",
@@ -43,7 +44,7 @@
     "bunyan": "^1.8.12",
     "chart.js": "^2.8.0",
     "cross-env": "^5.2.0",
-    "dotenv":   "^8.2.0",
+    "dotenv": "^8.2.0",
     "express-validator": "^6.6.1",
     "js-cookie": "^2.2.0",
     "js-yaml": "^3.13.1",

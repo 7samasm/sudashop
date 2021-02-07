@@ -2,6 +2,7 @@ const Koa = require('koa')
 const { Nuxt, Builder } = require('nuxt')
 const chalk = require('chalk')
 const proxy = require('koa-proxies')
+const cors  = require('@koa/cors')
 require('dotenv').config()
 
 const config = require('../nuxt.config.js')
@@ -20,6 +21,7 @@ async function start() {
   config.dev = !(app.env === 'production')
 
   const nuxt = new Nuxt(config)
+  app.use(cors())
   // Build only in dev mode
   if (config.dev) {
     const devConfigs = config.development
