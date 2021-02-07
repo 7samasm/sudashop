@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const emitErrors = require('../../utils/helpers').emitErrors
+const User = require('../../models/user')
 
 const isAuth = async (ctx, next) => {
   try {
@@ -20,6 +21,9 @@ const isAuth = async (ctx, next) => {
       error.statusCode = 401;
       throw error;
     }
+    const user = await User.findById(decodedToken.userId)
+    if(!user) throw new Error('Not authenticated invalid user id')
+
     ctx.req.userId = decodedToken.userId;
     ctx.app.context.userId = decodedToken.userId;
     return next()
