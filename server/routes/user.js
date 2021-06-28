@@ -1,87 +1,44 @@
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-/*  Routes to define development "kitchen sink" samples                                           */
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-const koaJoyRouter = require('koa-joi-router')
-const isAuth = require('../middlewares/routes_middlewares/isAuth')
-const consts = require('../utils/consts')
-const {userController} = require('../controllers/user')
+const express = require("express");
+const isAuth = require("../middlewares/routes_middlewares/isAuth");
+const { userController } = require("../controllers/user");
+const {
+  login_validate,
+  register_validate,
+  product_validate
+} = require("../middlewares/routes_middlewares/inputsValidations");
 
+const addFilesToReq = require("../middlewares/routes_middlewares/addFilesToRequest");
 
-const joi = koaJoyRouter.Joi
-const router = koaJoyRouter() // router middleware for koa
-router.prefix(consts.BASE_API + '/admin')
-
-const productValidateBody = {
-  title : joi.string().trim().max(20).min(4).required(),
-  price : joi.number().positive().not().empty(),
-  description : joi.string().trim().required(),
-  imageUrl : joi.string().trim().required(),
-  section :  joi.string().trim().required()
-}
-
+const router = express.Router();
 // cart
-router.get('/cart',isAuth,userController.getCart)
-router.post('/cart',isAuth,userController.postCart)
-router.delete('/cart/:productId',isAuth,userController.deleteCartItem)
-
+router.get("/cart", isAuth, userController.getCart);
+router.post("/cart", isAuth, userController.postCart);
+router.delete("/cart/:productId", isAuth, userController.deleteCartItem);
 //comments
-router.post('/comment',isAuth,userController.postComment)
-router.post('/delete-comment',isAuth,userController.removeComment)
-
+router.post("/comment", isAuth, userController.postComment);
+router.post("/delete-comment", isAuth, userController.removeComment);
 // products
-
-router.route({
-  method : 'post',
-  path : '/add-product',
-  validate : {
-    type : 'multipart',
-  },
-  handler : [isAuth,userController.postAddProduct]
-})
-
-router.route({
-  method : 'put',
-  path : '/edit-product',
-  validate : {
-    type : 'multipart',
-  },
-  handler : [isAuth,userController.putEditProduct]
-})
-
-router.post('/delete-product',isAuth,userController.deleteProduct)
-router.get('/products',isAuth,userController.getUserProducts);
-router.get('/products/:id',isAuth,userController.getUserProduct);
+router.post(
+  "/add-product",
+  isAuth,
+  addFilesToReq(),
+  product_validate,
+  userController.postAddProduct
+);
+router.put(
+  "/edit-product",
+  isAuth,
+  addFilesToReq(),
+  product_validate,
+  userController.putEditProduct
+);
+router.post("/delete-product", isAuth, userController.deleteProduct);
+router.get("/products", isAuth, userController.getUserProducts);
+router.get("/products/:id", isAuth, userController.getUserProduct);
 
 // auth
+router.post("/signup", register_validate, userController.signUp);
+router.post("/login", login_validate, userController.login);
+router.get("/user", isAuth, userController.getUser);
 
-router.get('/user',isAuth,userController.getUser)
-
-router.route({
-  method: 'post',
-  path: '/signup',
-  validate: {
-    body: {
-      name : joi.string().max(30).required(),
-      email : joi.string().lowercase().email().required(),
-      password : joi.string().max(100).required()
-    },
-    type : 'json',
-  },
-  handler : userController.signUp
-})
-router.route({
-  method: 'post',
-  path: '/login',
-  validate: {
-    body: {
-      email : joi.string().lowercase().email().required(),
-      password : joi.string().max(100).min(6).required()
-    },
-    type : 'json',
-    continueOnError : true
-  },
-  handler : userController.login,
-})
-
-
-module.exports = router
+module.exports = router;

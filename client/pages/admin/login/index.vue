@@ -83,7 +83,7 @@ export default {
         console.log(e)
         // statements
         this.dialog = true;
-        this.dialogText = e;
+        this.dialogText = e.message;
       }
     },
   },

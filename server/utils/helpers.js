@@ -1,6 +1,7 @@
 const querystring = require('querystring')
 const axios = require('axios')
 const jwtDecode = require('jwt-decode')
+const {validationResult} = require('express-validator')
 const consts = require('../utils/consts')
 
 const decode = (token) => {
@@ -105,6 +106,20 @@ const getEnvironmentVariable = variable => process.env[variable];
 const getGlobalDBUrl = () => `mongodb+srv://${getEnvironmentVariable(consts.DB_USERNAME)}:${getEnvironmentVariable(consts.DB_PASSWORD)}@cluster0.ldcad.mongodb.net/${getEnvironmentVariable(consts.DB)}?retryWrites=true&w=majority`
 const getLocalDBUrl = () => `mongodb://localhost:27017/${getEnvironmentVariable(consts.DB)}`
 
+
+const validResult = (req) =>  {
+  const errs  = validationResult(req) ;
+  if (!errs.isEmpty()) {
+    for (const err of errs.array()) {
+      const e  = new Error(`${err.msg} in ${err.param} input!`)
+      e.statusCode = 422
+      e.data = errs.array()
+      console.log(e)
+      throw e
+    }
+  }
+}
+
 module.exports = {
   decode,
   handleTokenExp,
@@ -113,5 +128,6 @@ module.exports = {
   emitErrors,
   getEnvironmentVariable,
   getGlobalDBUrl,
-  getLocalDBUrl
+  getLocalDBUrl,
+  validResult
 }

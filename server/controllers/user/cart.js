@@ -2,13 +2,10 @@ const { isValidObjectId, Types } = require('mongoose');
 
 const Product = require('../../models/product');
 const User = require('../../models/user')
-const emitErrors = require('../../utils/helpers').emitErrors
 
 
-exports.getCart = async (ctx, next) => {
+exports.getCart = async (req, res, next) => {
   try {
-    await next()
-    const { req } = ctx
     const userId = req.userId;
     if (!isValidObjectId(userId)) throw new Error('id is invalid')
     const cart = await User.aggregate([
@@ -41,41 +38,32 @@ exports.getCart = async (ctx, next) => {
         }
       }
     ])
-    ctx.status = 200
-    ctx.body = [...cart][0]
+    res.status(200).send([...cart][0]) 
   } catch (e) {
-    emitErrors(ctx,e)
+    next(e)
   }
 }
 
-exports.postCart = async (ctx, next) => {
+exports.postCart = async (req, res, next) => {
   try {
-    await next()
-    const {req,request} = ctx
-    const { productId,quantity } = request.body
+    const { productId,quantity } = req.body
     // const quantity = req.body.quantity
     const user = await User.findById(req.userId)
     const product = await Product.findById(productId)
     const result = await user.addToCart(product, +quantity)
-    ctx.status = 201
-    ctx.body = result
-    // res.status(201).send(result)
+    res.status(201).send(result) 
   } catch (e) {
-    emitErrors(ctx,e)
+    next(e)
   }
 };
 
-exports.deleteCartItem = async (ctx, next) => {
+exports.deleteCartItem = async (req, res, next) => {
   try {
-    await next()
-    const {request,req} = ctx
-    const { productId } = request.params;
+    const { productId } = req.params;
     const user = await User.findById(req.userId)
     await user.removeFromCart(productId)
-    ctx.status = 200
-    ctx.body = 'cart item was deleted !'
-    // res.send('deleated').status(200)
+    res.send('cart item was deleted !').status(200)
   } catch (e) {
-    emitErrors(ctx,e)
+    next(e)
   }
 }

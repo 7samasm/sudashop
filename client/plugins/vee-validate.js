@@ -3,6 +3,7 @@ import {
   required,
   email,
   min,
+  max,
   confirmed,
   alpha_dash} from 'vee-validate/dist/rules';
 
@@ -20,6 +21,11 @@ extend('email', {
 extend('min', {
   ...min,
   message: 'The {_field_} field must have at least {length} characters'
+});
+
+extend('max', {
+  ...max,
+  message: 'The {_field_} field mus\'t have more than {length} characters'
 });
 
 extend('confirmed', {

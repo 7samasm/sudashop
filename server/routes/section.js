@@ -1,13 +1,11 @@
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 /*  Routes to define development "kitchen sink" samples                                           */
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-const koaJoyRouter = require('koa-joi-router')
+const express = require('express')
 const isAuth = require('../middlewares/routes_middlewares/isAuth')
-const consts = require('../utils/consts')
 const sectionController  = require('../controllers/section')
 
-const router = koaJoyRouter() // router middleware for koa
-router.prefix(consts.BASE_API + '/sections')
+const router = express.Router() // router middleware for koa
 
 router.get('/',sectionController.getAll)
 router.post('/',isAuth,sectionController.addSection);

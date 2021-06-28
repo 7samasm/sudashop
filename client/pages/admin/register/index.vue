@@ -1,11 +1,22 @@
 <template>
   <v-row justify="center">
+    <custom-dialog
+      :title="dialogTitle"
+      hideLeftBtn
+      :message="dialogText"
+      :visible="dialog"
+      @rightHasClicked="onDialogBtnClicked"
+    ></custom-dialog>
     <v-col md="6">
       <v-card>
         <v-card-text>
           <validation-observer v-slot="{ invalid }">
             <v-form>
-              <validation-provider rules="required|min:4|alpha_dash" name="username" v-slot="{ errors }">
+              <validation-provider
+                rules="required|min:4|alpha_dash"
+                name="username"
+                v-slot="{ errors }"
+              >
                 <v-text-field
                   :error-messages="errors"
                   ref="name"
@@ -16,7 +27,11 @@
                 ></v-text-field>
               </validation-provider>
               <!-- <pre>{{this.$v}}</pre> -->
-              <validation-provider rules="required|email" name="email" v-slot="{ errors }">
+              <validation-provider
+                rules="required|email"
+                name="email"
+                v-slot="{ errors }"
+              >
                 <v-text-field
                   :error-messages="errors"
                   label="email"
@@ -26,8 +41,13 @@
                 ></v-text-field>
               </validation-provider>
 
-              <validation-provider rules="required|min:6" v-slot="{ errors }" name="password" vid="confirmation">
-              <v-text-field
+              <validation-provider
+                rules="required|min:6"
+                v-slot="{ errors }"
+                name="password"
+                vid="confirmation"
+              >
+                <v-text-field
                   :error-messages="errors"
                   label="password"
                   v-model.trim="password"
@@ -37,7 +57,11 @@
                 ></v-text-field>
               </validation-provider>
 
-              <validation-provider rules="confirmed:confirmation" v-slot="{ errors }" name="repeatl password">
+              <validation-provider
+                rules="confirmed:confirmation"
+                v-slot="{ errors }"
+                name="repeatl password"
+              >
                 <v-text-field
                   :error-messages="errors"
                   label="Repeatl password"
@@ -68,6 +92,7 @@
 
 <script>
 import { ValidationProvider, ValidationObserver } from "vee-validate";
+import CustomDialog from "../../../components/ui/CustomDialog.vue";
 export default {
   data() {
     return {
@@ -76,11 +101,15 @@ export default {
       email: "",
       password: "",
       repassword: "",
+      dialog: false,
+      dialogText: "",
+      dialogTitle: "",
     };
   },
   components: {
     ValidationProvider,
     ValidationObserver,
+    CustomDialog,
   },
   computed: {
     baseColor() {
@@ -91,19 +120,34 @@ export default {
     },
   },
   methods: {
-    signUp() {
-      this.$api
-        .signUp({
+    async signUp() {
+      try {
+        const user = await this.$api.signUp({
           name: this.name,
           email: this.email,
           password: this.password,
-        })
-        .then((user) => {
-          console.log(user);
-          alert(`${user.data.name} has been added`);
-          this.$router.push("/admin/login");
         });
+        console.log(user);
+        const msg = `${user.data.name} has been added sucsessfuly`;
+        this.dialogTitle = "Tip";
+        this.dialogText = msg;
+        this.dialog = true;
+        // this.$router.push("/admin/login");
+      } catch (e) {
+        const errorMessage = e.response.data.message
+        this.dialogTitle = "Error";
+        this.dialogText = errorMessage;
+        this.dialog = true;
+      }
     },
+    onDialogBtnClicked(){
+      // check if dialog title is Error which changed after press register btn
+      if (this.dialogTitle.includes('rror')) {
+        this.dialog = false
+        return
+      }
+      this.$router.push("/admin/login");
+    }
   },
   mounted() {
     console.log(this);

@@ -1,12 +1,9 @@
 const Comment = require('../../models/comment')
 const Product = require('../../models/product')
-const {emitErrors} = require('../../utils/helpers')
 
-exports.postComment = async (ctx, next) => {
+exports.postComment = async (req, res, next) => {
   try {
-    await next()
-    const {request,req} = ctx
-    const { productId, commentText } = request.body
+    const { productId, commentText } = req.body
     // add comment to comments collection
     const comment = await new Comment({
       commentText,
@@ -20,25 +17,20 @@ exports.postComment = async (ctx, next) => {
         path: 'userId',
         select: 'name email'
       }).execPopulate()
-      ctx.status = 201
-      ctx.body = populatedComment
-      // res.status(201).send(populatedComment)
+      res.status(201).send(populatedComment)
     } else {
       throw new Error('product was not found')
     }
   } catch (error) {
-    emitErrors(ctx,error)
+    next(error)
   }
 
 }
 
-exports.removeComment = async (ctx, next) => {
+exports.removeComment = async (req, res, next) => {
   try {
-    await next()
-    const {request,req} = ctx
     // get commentId and userId inputs
-    console.log(request.body)
-    const {productId,commentId} = request.body
+    const {productId,commentId} = req.body
     const userId = req.userId
     // check if userId equal to hardcoded userId
     if (userId === process.env['ADMIN_MDB_ID']) {
@@ -49,11 +41,11 @@ exports.removeComment = async (ctx, next) => {
       // remove comment from db by geted id
       const deletedDocumment = await Comment.findByIdAndRemove(commentId)
       // send deleted doc to response 
-      ctx.body = deletedDocumment
+      res.status(200).send(deletedDocumment)
     } else {
       throw new Error('no userId matched')
     }
   } catch (error) {
-    emitErrors(ctx,error)
+    next(error)
   }
 }

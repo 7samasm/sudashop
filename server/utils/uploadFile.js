@@ -3,6 +3,7 @@ const fs = require("fs");
 const  {getEnvironmentVariable}  = require('./helpers')
 
 const uploadFile = async ({ fileName, filePath, fileType }) => {
+  console.log(fileName)
   return new Promise((resolve, reject) => {
     aws.config.update({
       // You'll need your service's access keys here

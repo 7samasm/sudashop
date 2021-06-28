@@ -1,100 +1,94 @@
-const pick = require('lodash').pick
-const chalk = require('chalk')
-const objectId = require('mongoose').Types.ObjectId
-const isValidObjectId = require('mongoose').isValidObjectId
-const emitErrors = require('../../utils/helpers').emitErrors
-const {uploadFile} = require('../../utils/uploadFile')
-const {setControllerPaginationLogic} = require('../products')
+const pick = require("lodash").pick;
+const objectId = require("mongoose").Types.ObjectId;
+const isValidObjectId = require("mongoose").isValidObjectId;
+const { uploadFile } = require("../../utils/uploadFile");
+const { setControllerPaginationLogic } = require("../products");
 
+const Product = require("../../models/product");
+const User = require("../../models/user");
 
-const Product = require('../../models/product');
-const User = require('../../models/user')
-
-exports.postAddProduct = async (ctx, next) => {
-  const {request} = ctx
-  const body = pick(request.body, ['title', 'price', 'description', 'imageUrl', 'section'])
-   try {
-    await next()
-    await handleUpload(ctx, body)
+exports.postAddProduct = async (req, res, next) => {
+  const body = pick(req.body, [
+    "title",
+    "price",
+    "description",
+    "imageUrl",
+    "section"
+  ]);
+  try {
+    // console.log(req.file);
+    await handleUpload(req, body);
     const product = new Product({
       ...body,
-      userId: ctx.userId
+      userId: req.userId
     });
-    ctx.status = 201
-    ctx.body = await product.save()
-    console.dir(ctx.req.userId + ' mm')
+    res.status(201).send(await product.save());
   } catch (e) {
-    emitErrors(ctx,e)
+    next(e);
   }
 };
 
-exports.putEditProduct = async (ctx, next) => {
-  const {request} = ctx
-  const body = pick(request.body, ['title', 'price', 'description', 'imageUrl', 'section'])
-  const prodId = request.body.productId;
+exports.putEditProduct = async (req, res, next) => {
+  const body = pick(req.body, [
+    "title",
+    "price",
+    "description",
+    "imageUrl",
+    "section"
+  ]);
+  const prodId = req.body.productId;
   try {
-    await next()
-    await handleUpload(ctx, body)
-    const doc = await Product.findById(prodId)
+    await handleUpload(req, body);
+    const doc = await Product.findById(prodId);
     for (const prop in body) {
-      doc.set(prop, body[prop])
+      doc.set(prop, body[prop]);
     }
-    const updatedDoc = await doc.save()
-    ctx.status = 200
-    ctx.body = updatedDoc
-    // console.log(ctx.body)
-
+    res.status(201).send(await doc.save());
   } catch (e) {
-    emitErrors(ctx,e)
+    next(e);
   }
 };
 
-exports.deleteProduct = async (ctx, next) => {
+exports.deleteProduct = async (req, res, next) => {
   try {
-    await next()
-    const userId = ctx.req.userId;
-    const {request} = ctx
-    const {productId} = request.body
-    const doc = await Product.findById(productId)
-    await doc.remove()
-    await setControllerPaginationLogic(ctx,{userId},request.body)
+    const userId = req.userId;
+    const { productId } = req.body;
+    const doc = await Product.findById(productId);
+    await doc.remove();
+    await setControllerPaginationLogic(req, res, { userId }, req.body);
   } catch (e) {
-    emitErrors(ctx,e)
+    next(e);
   }
 };
 
-exports.getUserProducts = async (ctx,next) => {
-  const userId = ctx.req.userId;
+exports.getUserProducts = async (req, res, next) => {
+  const userId = req.userId;
   try {
-    await next()
-    if (!isValidObjectId(userId)) throw new Error('id is invalid')
-    await setControllerPaginationLogic(ctx,{userId})
+    if (!isValidObjectId(userId)) throw new Error("id is invalid");
+    await setControllerPaginationLogic(req, res, { userId });
   } catch (e) {
-    emitErrors(ctx,e)
+    next(e);
   }
-}
+};
 
-exports.getUserProduct = async (ctx, next) => {
+exports.getUserProduct = async (req, res, next) => {
   try {
-    await next()
-    const {request,req} = ctx
-    const { id } = request.params;
+    const { id } = req.params;
     if (objectId.isValid(id)) {
-      const userProds = await Product.findOne({ _id: id, userId: req.userId })
-      ctx.status = 200
-      ctx.body = userProds
+      const userProds = await Product.findOne({ _id: id, userId: req.userId });
+      res.status(200).send(userProds);
     } else {
-      ctx.body = false
+      res.send(false);
     }
   } catch (e) {
-    emitErrors(ctx,e)
+    next(e);
   }
 };
 
 exports.userInfos = async (req, res, next) => {
   try {
     const userId = req.userId;
-    if (!objectId.isValid(userId)) throw new Error('id is invalid')
+    if (!objectId.isValid(userId)) throw new Error("id is invalid");
     const stat = await User.aggregate([
       //  select user who match requsted id
       { $match: { _id: objectId(userId) } },
@@ -123,7 +117,7 @@ exports.userInfos = async (req, res, next) => {
       },
       // add quantity field to cart
       { $addFields: { "_cart.quantity": "$cart.quantity" } },
-      // group spilted docs by user _id        
+      // group spilted docs by user _id
       {
         $group: {
           _id: {
@@ -135,11 +129,13 @@ exports.userInfos = async (req, res, next) => {
             }
           },
           _cart: { $push: "$_cart" },
-          totalPrice: { $sum: { $multiply: ["$_cart.price", "$_cart.quantity"] } },
+          totalPrice: {
+            $sum: { $multiply: ["$_cart.price", "$_cart.quantity"] }
+          },
           totalItems: { $sum: { $multiply: [1, "$_cart.quantity"] } }
         }
       },
-      // bunddle to final output      
+      // bunddle to final output
       {
         $project: {
           _id: 0,
@@ -151,46 +147,39 @@ exports.userInfos = async (req, res, next) => {
           }
         }
       }
-    ]).exec()
+    ]).exec();
 
     Product.find({ userId }, (err, docs) => {
-      res.send({
-        user: stat[0].user,
-        cart: stat[0].cartShape,
-        products: docs
-      }).status(200)
-    })
+      res
+        .send({
+          user: stat[0].user,
+          cart: stat[0].cartShape,
+          products: docs
+        })
+        .status(200);
+    });
+  } catch (e) {
+    next(e);
   }
-  catch (e) {
-    next(e)
-  };
 };
 
-function handleUpload(ctx, body) {
-  return new Promise(async (resolve,reject) => {
+function handleUpload(req, body) {
+  return new Promise(async (resolve, reject) => {
     try {
-      const file = ctx.request.files.image
-      if (file) {
-        const {name,path,type,size} = file
-        console.log(type,size,typeof type);
-        if (type !== 'image/jpeg' && type !== 'image/png') {
-          throw new Error('only support png,jpeg and jpg')
-        }
-        if (size > 99999) {
-          throw new Error('too big image size')
-        }
+      if (req.file) {
+        const { filename, path, mimetype } = req.file;
         const { key, url } = await uploadFile({
-          fileName: name,
+          fileName: filename,
           filePath: path,
-          fileType: type,
-        })
-        console.log(key, url)
+          fileType: mimetype
+        });
+        console.log(key, url);
         // mutate image url with requsted uploded file if found
-        if (url) body.imageUrl = url
-      } 
-      resolve(true)
+        if (url) body.imageUrl = url;
+      }
+      resolve(true);
     } catch (e) {
-      reject(e)
+      reject(e);
     }
-  })
+  });
 }

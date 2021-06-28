@@ -1,8 +1,8 @@
-const Koa = require('koa')
+const express = require('express')
 const { Nuxt, Builder } = require('nuxt')
 const chalk = require('chalk')
 const proxy = require('koa-proxies')
-const cors  = require('@koa/cors')
+const cors  = require('cors')
 require('dotenv').config()
 
 const config = require('../nuxt.config.js')
@@ -15,9 +15,9 @@ const consts = require('./utils/consts')
 async function start() {
   const host = consts.HOST
   const port = consts.PORT
-  const app = new Koa()
+  const app = express()
 
-  app.keys = ['hare-server']
+  // app.keys = ['hare-server']
   config.dev = !(app.env === 'production')
 
   const nuxt = new Nuxt(config)
@@ -42,29 +42,30 @@ async function start() {
   // rights for public/protected elements, and also for different functionality between api & web
   // pages (content negotiation, error handling, handlebars templating, etc).
 
-  app.use(async (ctx, next) => {
+  app.use(async (req, res, next) => {
     // use subdomain to determine which app to serve: www. as default, or admin. or api
     // note: could use root part of path instead of sub-domains e.g. ctx.request.url.split('/')[1]
-    ctx.state.subapp = ctx.url.split('/')[1] // subdomain = part after first '/' of hostname
-    if (ctx.state.subapp !== consts.API) {
-      ctx.status = 200 // koa defaults to 404 when it sees that status is unset
-      ctx.req.session = ctx.session
+    req.subapp = req.url.split('/')[1] // subdomain = part after first '/' of hostname
+    if (req.subapp !== consts.API) {
+      res.status(200)// koa defaults to 404 when it sees that status is unset
       await new Promise((resolve, reject) => {
-        nuxt.render(ctx.req, ctx.res, err => err ? reject(err) : resolve())
+        nuxt.render(req, res, err => err ? reject(err) : resolve())
       })
     } else {
-      await next()
+      next()
     }
   })
 
   useMiddlewares(app)
-  app.context.db = 'db from app'
   useRoutes(app)
-
   // centerlize errors
-  app.on('error',(e,ctx)=>{
-    console.log(e.message)
-  })
+  app.use((error, req, res, next) => {
+    console.log(error.message);
+    const status = error.statusCode || 500;
+    const message = error.message;
+    const data = error.data;
+    res.status(status).json({ message: message, data: data });
+  });
 
   //conect to db
 connectDb((err,res) => {

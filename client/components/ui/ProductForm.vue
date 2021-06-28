@@ -12,7 +12,7 @@
       <validation-observer v-slot="{ invalid }">
         <v-form ref="form">
           <validation-provider
-            rules="required"
+            rules="required|max:10"
             name="title"
             v-slot="{ errors }"
           >
@@ -183,7 +183,7 @@ export default {
           this.dialogText = `${res.data.title} hass been added successflly do you want to add anthor product ?`;
         }
       } catch (e) {
-        const errorMessage = e.response.data
+        const errorMessage = e.response.data.message
         this.dialogTitle = 'Error'
         this.dialogText =  this.editable ? errorMessage : errorMessage + ' do you want to retry ?';
       } finally {

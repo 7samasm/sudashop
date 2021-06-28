@@ -14,8 +14,8 @@ const mapValueKeys = (prefix = '$') => {
 }
 
 
-const setControllerPaginationLogic = async (ctx, paginateQuery = {},postedQueries = null) => {
-  let query = ctx.query
+const setControllerPaginationLogic = async (req,res, paginateQuery = {},postedQueries = null) => {
+  let query = req.query
   if (postedQueries) {
     query = postedQueries
   } 
@@ -31,28 +31,24 @@ const setControllerPaginationLogic = async (ctx, paginateQuery = {},postedQuerie
       page: +query.page || 1
     }
   );
-  ctx.status = 200;
-  ctx.body = result;
+  res.status(200).json(result)
 }
 
 exports.setControllerPaginationLogic = setControllerPaginationLogic
 
-exports.getIndex = async (ctx, next) => {
+exports.getIndex = async (req, res , next) => {
   try {
-    await next()
-    await setControllerPaginationLogic(ctx)
+    await setControllerPaginationLogic(req,res)
   } catch (error) {
-    emitErrors(ctx, error)
+    next(error)
   }
 
 };
 
 
-exports.getProduct = async (ctx, next) => {
+exports.getProduct = async (req,res, next) => {
   try {
-    await next()
-    const { params } = ctx
-    const {id} = params;
+    const {id} = req.params;
     if (isValidObjectId(id)) {
       const product = await Product.findById(id)
         .populate('userId', '-cart -password')
@@ -60,31 +56,27 @@ exports.getProduct = async (ctx, next) => {
           path: 'comments',
           populate: { path: 'userId', select: 'name email' }
         })
-      ctx.status = 200
-      ctx.body = product
-      // res.send(product).status(200)
+      res.status(200).json(product)
     } else {
-      ctx.body = false
+      res.send(false)
     }
   } catch (e) {
-    emitErrors(ctx, e)
+    next(e)
   }
 }
 
-exports.getProductsBySection = async (ctx, next) => {
+exports.getProductsBySection = async (req, res, next) => {
   try {
-    await next()
-    const section = ctx.params.section;
-    await setControllerPaginationLogic(ctx, {section});
+    const {section} = req.params;
+    await setControllerPaginationLogic(req, res, {section});
     // res.send(result).status(200)
   } catch (error) {
-    emitErrors(ctx, error)
+    next(error)
   }
 };
 
-exports.getMostCommonProducts = async (ctx, next) => {
+exports.getMostCommonProducts = async (req, res, next) => {
   try {
-    await next()
     const prods = await Product.aggregate([
       { $unwind: "$comments" },
       { $group: { _id: mapValueKeys(), commentsCount: { $sum: 1 } } },
@@ -92,10 +84,9 @@ exports.getMostCommonProducts = async (ctx, next) => {
       { $sort: { commentsCount: -1 } },
       { $limit: 3 },
     ])
-    ctx.status = 200
-    ctx.body = prods
+    res.status(200).json(prods);
   } catch (error) {
-    emitErrors(ctx, error)
+    next(error)
   }
 }
 
