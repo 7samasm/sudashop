@@ -9,6 +9,7 @@ const useMiddlewares = require("./middlewares");
 const useRoutes = require("./routes");
 const { connectDb } = require("./config");
 const consts = require("./utils/consts");
+const { getEnvironmentVariable } = require("./utils/helpers.js");
 
 // Start nuxt.js
 async function start() {
@@ -21,7 +22,7 @@ async function start() {
 
   const nuxt = new Nuxt(config);
   // Build only in dev mode
-  if (config.dev) {
+  if (config.dev && +getEnvironmentVariable("BUILD_NUXT_ON_DEV")) {
     const devConfigs = config.development;
     if (devConfigs && devConfigs.proxies) {
       for (const proxyItem of devConfigs.proxies) {

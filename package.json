@@ -11,7 +11,7 @@
   },
   "scripts": {
     "dev": "cross-env DEBUG=nuxt:* nodemon -w server -w nuxt.config.js server/app.js",
-    "dev:new": "cross-env NODE_ENV=development nodemon server/app.js --watch server",
+    "dev:new": "cross-env BUILD_NUXT_ON_DEV=0 nodemon -w server  -w nuxt.config.js server/app.js",
     "dev:pm2": "pm2 start npm --name=hare -- dev",
     "test": "npm lint && npm build:client && ava --verbose --serial ",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
@@ -93,7 +93,7 @@
     "standard-version": "6.0.1"
   },
   "engines": {
-    "node": ">=12.20.2",
-    "npm": ">=6.14.8"
+    "node": "12.22.6",
+    "npm": "6.14.15"
   }
 }
