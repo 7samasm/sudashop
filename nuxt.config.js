@@ -1,53 +1,54 @@
-const webpack = require('webpack')
-const {default:colors} = require('vuetify/es5/util/colors')
+const webpack = require("webpack");
+const { default: colors } = require("vuetify/es5/util/colors");
 
+const globalCss = [];
 
-const globalCss = []
-
-if (process.env.NODE_ENV !== 'production') {
-  globalCss.push('@mdi/font/css/materialdesignicons.css')
+if (process.env.NODE_ENV !== "production") {
+  globalCss.push("@mdi/font/css/materialdesignicons.css");
 }
 
 module.exports = {
-  srcDir: 'client/',
-  buildDir: 'dist/client/',
-  rootDir: './',
-  modern: 'server',
+  srcDir: "client/",
+  buildDir: "dist/client/",
+  rootDir: "./",
+  modern: "server",
   /*
-  ** Router config
-  */
+   ** Router config
+   */
   router: {
     // middleware: [
     //   'check-auth'
     // ]
-    routeNameSplitter: '/'
+    routeNameSplitter: "/"
   },
   /*
-  ** Headers of the page
-  */
+   ** Headers of the page
+   */
   head: {
-    titleTemplate: '%s - ' + process.env.npm_package_name,
-    title: process.env.npm_package_name || '',
+    titleTemplate: "%s - " + process.env.npm_package_name,
+    title: process.env.npm_package_name || "",
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
+      { charset: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      {
+        hid: "description",
+        name: "description",
+        content: process.env.npm_package_description || ""
+      }
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
   },
   /*
-  ** Build config
-  */
+   ** Build config
+   */
   build: {
     transpile: ["vee-validate/dist/rules"],
-    publicPath: '/hare/',
+    publicPath: "/hare/",
     extractCSS: true,
     babel: {
       plugins: [
-        ['@babel/plugin-proposal-decorators', { legacy: true }],
-        ['@babel/plugin-proposal-class-properties', { loose: true }]
+        ["@babel/plugin-proposal-decorators", { legacy: true }],
+        ["@babel/plugin-proposal-class-properties", { loose: true }]
       ]
     },
     extend(config) {
@@ -56,35 +57,30 @@ module.exports = {
           resourceRegExp: /^\.\/locale$/,
           contextRegExp: /moment$/
         })
-      )
+      );
     }
   },
   /*
-  ** Customize the Progress Bar
-  */
-  loading: { color: '#3f51b5', height: '2px' },
+   ** Customize the Progress Bar
+   */
+  loading: { color: "#3f51b5", height: "2px" },
   /*
-  ** Generate config
-  */
+   ** Generate config
+   */
   generate: {
-    dir: '.generated'
+    dir: ".generated"
   },
   /*
-  ** Global CSS
-  */
+   ** Global CSS
+   */
   css: globalCss,
   /*
-  ** Add element-ui in our app, see plugins/element-ui.js file
-  */
-  plugins: [
-    '@/plugins/vee-validate',
-    '@/plugins/api'
-  ],
-  buildModules: [
-    '@nuxtjs/vuetify',
-  ],
+   ** Add element-ui in our app, see plugins/element-ui.js file
+   */
+  plugins: ["@/plugins/vee-validate", "@/plugins/api"],
+  buildModules: ["@nuxtjs/vuetify"],
   vuetify: {
-    customVariables: ['~/assets/variables.scss'],
+    customVariables: ["~/assets/variables.scss"],
     theme: {
       dark: false,
       themes: {
@@ -101,40 +97,41 @@ module.exports = {
     }
   },
   modules: [
-    '@nuxtjs/axios',
+    "@nuxtjs/axios",
     // '@nuxtjs/proxy',
-    '@nuxtjs/auth',
-    '@nuxtjs/moment',
+    "@nuxtjs/auth",
+    "@nuxtjs/moment",
     [
-      'vue-currency-filter/nuxt',
+      "vue-currency-filter/nuxt",
       {
-        symbol: 'SDG',
-        thousandsSeparator: ',',
+        symbol: "SDG",
+        thousandsSeparator: ",",
         fractionCount: 2,
-        fractionSeparator: '.',
-        symbolPosition: 'back',
+        fractionSeparator: ".",
+        symbolPosition: "back",
         symbolSpacing: true
       }
     ]
   ],
   axios: {
-    browserBaseURL: '/'
+    browserBaseURL: "/"
   },
   auth: {
     redirect: {
-      logout: '/',
-      login: '/admin/login'
+      logout: "/",
+      login: "/admin/login"
     },
     strategies: {
       local: {
         endpoints: {
-          login: { url: '/hpi/admin/login', method: 'post', propertyName: 'token' },
-          user: { url: '/hpi/admin/user', method: 'get', propertyName: 'user' },
+          login: {
+            url: "/hpi/admin/login",
+            method: "post",
+            propertyName: "token"
+          },
+          user: { url: "/hpi/admin/user", method: "get", propertyName: "user" },
           logout: false
-        },
-        // tokenRequired : false,
-        tokenType: '',
-        tokenName: 'x-Auth'
+        }
       }
     }
   },
@@ -152,6 +149,6 @@ module.exports = {
     ]
   },
   env: {
-    baseUrl: process.env.BASE_URL || 'http://localhost:3000',
-  },
-}
+    baseUrl: process.env.BASE_URL || "http://localhost:7878"
+  }
+};

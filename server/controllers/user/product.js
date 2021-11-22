@@ -20,7 +20,7 @@ exports.postAddProduct = async (req, res, next) => {
     await handleUpload(req, body);
     const product = new Product({
       ...body,
-      userId: req.userId
+      userId: req.user.id
     });
     res.status(201).send(await product.save());
   } catch (e) {
@@ -51,18 +51,24 @@ exports.putEditProduct = async (req, res, next) => {
 
 exports.deleteProduct = async (req, res, next) => {
   try {
-    const userId = req.userId;
+    const userId = req.user.id;
     const { productId } = req.body;
     const doc = await Product.findById(productId);
-    await doc.remove();
-    await setControllerPaginationLogic(req, res, { userId }, req.body);
+    const removedDoc = await doc.remove();
+    await setControllerPaginationLogic(
+      req,
+      res,
+      { userId },
+      req.body,
+      removedDoc
+    );
   } catch (e) {
     next(e);
   }
 };
 
 exports.getUserProducts = async (req, res, next) => {
-  const userId = req.userId;
+  const userId = req.user.id;
   try {
     if (!isValidObjectId(userId)) throw new Error("id is invalid");
     await setControllerPaginationLogic(req, res, { userId });
@@ -75,7 +81,7 @@ exports.getUserProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
     if (objectId.isValid(id)) {
-      const userProds = await Product.findOne({ _id: id, userId: req.userId });
+      const userProds = await Product.findOne({ _id: id, userId: req.user.id });
       res.status(200).send(userProds);
     } else {
       res.send(false);
@@ -87,7 +93,7 @@ exports.getUserProduct = async (req, res, next) => {
 
 exports.userInfos = async (req, res, next) => {
   try {
-    const userId = req.userId;
+    const userId = req.user.id;
     if (!objectId.isValid(userId)) throw new Error("id is invalid");
     const stat = await User.aggregate([
       //  select user who match requsted id

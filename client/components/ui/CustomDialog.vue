@@ -1,7 +1,9 @@
 <template>
-  <v-dialog  width="400" v-model="show" persistent>
+  <v-dialog width="400" v-model="show" persistent>
     <v-card>
-      <v-card-title :class="['font-weight-medium',titleColor]">{{title}}</v-card-title>
+      <v-card-title :class="['font-weight-medium', titleColor]">{{
+        title
+      }}</v-card-title>
       <v-card-text class="text-center">
         {{ message }}
       </v-card-text>
@@ -34,59 +36,59 @@
 export default {
   // props : ['visible','title','message','loadingRightBtn'],
   props: {
-    visible : {
-      required : true,
-      type : Boolean,
+    visible: {
+      required: true,
+      type: Boolean,
     },
-    title : {
-      required : true,
-      type : String,
+    title: {
+      required: true,
+      type: String,
     },
-    message : {
-      required : true,
-      type : String,
+    message: {
+      required: true,
+      type: String,
     },
-    loadingRightBtn : {
-      type : Boolean,
-      required : false
+    loadingRightBtn: {
+      type: Boolean,
+      required: false,
     },
-    hideLeftBtn : {
-      type : Boolean,
-      required : false,
-      default : false
-    }
+    hideLeftBtn: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
-  computed : {
-    show : {
+  computed: {
+    show: {
       get() {
-        return this.visible
+        return this.visible;
       },
       set(value) {
         if (!value) {
-          this.$emit('close')
+          this.$emit("close");
         }
-      }
+      },
     },
-    loadRightBtn(){
-      return this.loadingRightBtn || false
+    loadRightBtn() {
+      return this.loadingRightBtn || false;
     },
-    hideLeftButton(){
-      return this.hideLeftBtn
+    hideLeftButton() {
+      return this.hideLeftBtn;
     },
-    titleColor(){
+    titleColor() {
       switch (this.title.toString().trim().toLowerCase()) {
-        case 'error':
-          return 'red--text'
+        case "error":
+          return "red--text";
           break;
-        case 'tip' :
-          return 'teal--text'
-          break
+        case "tip":
+          return "teal--text";
+          break;
         default:
-          return 'orange--text'
+          return "orange--text";
           break;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -1,5 +1,6 @@
-const {json} = require('body-parser'); // body parser
-const compression = require('compression') // HTTP compression
+const { json } = require("body-parser");
+const cookieParser = require("cookie-parser"); // body parser
+const compression = require("compression"); // HTTP compression
 // const session = require('koa-session') // session for flash messages
 
 // const useLogger = require('./logger')
@@ -8,7 +9,7 @@ const compression = require('compression') // HTTP compression
 // const responseTime = require('./response-time')
 // const robots = require('./response-time')
 
-module.exports = (app) => {
+module.exports = app => {
   // useLogger(app)
   // Add valid and beforeSave hooks here to ensure session is valid #TODO
   // const SESSION_CONFIG = {
@@ -18,10 +19,11 @@ module.exports = (app) => {
   // app.use(session(SESSION_CONFIG, app))
   // app.use(responseTime)
   // HTTP compression
-  app.use(compression())
+  app.use(compression());
   // app.use(robots)
   // parse request body into ctx.request.body
-  app.use(json({urlencoded : true}))
+  app.use(json({ urlencoded: true }));
+  app.use(cookieParser());
   // app.use(content)
   // app.use(examples)
-}
+};

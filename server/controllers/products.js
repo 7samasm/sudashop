@@ -14,7 +14,7 @@ const mapValueKeys = (prefix = '$') => {
 }
 
 
-const setControllerPaginationLogic = async (req,res, paginateQuery = {},postedQueries = null) => {
+const setControllerPaginationLogic = async (req,res, paginateQuery = {},postedQueries = null,extra = null) => {
   let query = req.query
   if (postedQueries) {
     query = postedQueries
@@ -31,7 +31,7 @@ const setControllerPaginationLogic = async (req,res, paginateQuery = {},postedQu
       page: +query.page || 1
     }
   );
-  res.status(200).json(result)
+  res.status(200).json({...result,extra})
 }
 
 exports.setControllerPaginationLogic = setControllerPaginationLogic
