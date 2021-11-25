@@ -2,7 +2,6 @@ const pick = require("lodash").pick;
 const bcrypt = require("bcryptjs");
 const { randomBytes } = require("crypto");
 const jwt = require("jsonwebtoken");
-const chalk = require('chalk')
 
 const User = require("../../models/user");
 const RefreshToken = require("../../models/refreshToken");
@@ -62,12 +61,12 @@ exports.login = async (req, res, next) => {
     //tokenExpiration in seconds 4h * 60m * 60s
     res.status(200).json({
       userId: user._id.toString(),
-      name : user.name,
-      email : user.email,
-      status : user.status,
+      name: user.name,
+      email: user.email,
+      status: user.status,
       token,
       tokenExpireIn: TOKEN_EXPIRE_IN,
-      refreshToken: refreshToken.token,
+      refreshToken: refreshToken.token
     });
   } catch (e) {
     next(e);
@@ -80,14 +79,14 @@ exports.refreshToken = async (req, res, next) => {
     const tokenFromCookies = req.cookies.refresh_token;
     let refresh_token = tokenFromCookies;
     if (!tokenFromCookies) {
-      refresh_token = req.query.refresh_token
+      refresh_token = req.query.refresh_token;
     }
     console.log(refresh_token);
     const ipAddress = req.ip;
     const refreshToken = await RefreshToken.findOne({
       token: refresh_token
     }).populate("user");
-    console.log(chalk.bgHex('#f00').white('[[refreshToken is ]]'),refreshToken)
+    console.log("[[refreshToken is ]]", refreshToken);
     if (!refreshToken || !refreshToken.isActive)
       throw new Error("Invalid token");
     const { user } = refreshToken;
@@ -109,9 +108,9 @@ exports.refreshToken = async (req, res, next) => {
     res.status(200).json({
       token,
       userId: user._id.toString(),
-      name : user.name,
-      email : user.email,
-      status : user.status,
+      name: user.name,
+      email: user.email,
+      status: user.status,
       tokenExpireIn: TOKEN_EXPIRE_IN,
       refreshToken: newRefreshToken.token
     });
@@ -152,7 +151,7 @@ function generateRefreshToken(user, ipAddress) {
 function setRefreshTokenCookie(res, { token, expires }) {
   const setCookieOptions = {
     httpOnly: true,
-    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   };
   res.cookie("refresh_token", token, setCookieOptions);
 }

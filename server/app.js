@@ -1,6 +1,5 @@
 const express = require("express");
 const { Nuxt, Builder } = require("nuxt");
-const chalk = require("chalk");
 const cors = require("cors");
 require("dotenv").config();
 
@@ -73,11 +72,7 @@ async function start() {
   });
 
   // eslint-disable-next-line no-console
-  console.log(
-    "\n" +
-      chalk.bgHex("#009688").white(" OPEN ") +
-      chalk.white(` http://${HOST}:${PORT}\n`)
-  );
+  console.log("\n" + " OPEN " + ` http://${HOST}:${PORT}\n`);
 }
 
 start();

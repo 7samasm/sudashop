@@ -1,35 +1,33 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 const {
-	getEnvironmentVariable,
-	getGlobalDBUrl,
-	getLocalDBUrl
-} = require('../utils/helpers')
+  getEnvironmentVariable,
+  getGlobalDBUrl,
+  getLocalDBUrl
+} = require("../utils/helpers");
 
 // dont forget to use Environment Variables in local machine or global
 
 const getDbConnectionString = () => {
-	if (getEnvironmentVariable('NODE_ENV') === 'production')
-		return getGlobalDBUrl()
-	return getLocalDBUrl()
-}
+  if (/*getEnvironmentVariable('NODE_ENV') === 'production'*/ true)
+    return getGlobalDBUrl();
+  return getLocalDBUrl();
+};
 
 module.exports = {
-
-	async connectDb(cb) {
-		try {
-			console.log(getDbConnectionString())
-			const res = await mongoose.connect(
-				getDbConnectionString(),
-				{ useNewUrlParser: true, useUnifiedTopology: true },
-				err => {
-					if (err) throw new Error('conection failed :(')
-				}
-			)
-			cb(err = null, res)
-		} catch (error) {
-			cb(error, undefined)
-		}
-	}
-
-}
+  async connectDb(cb) {
+    try {
+      console.log(getDbConnectionString());
+      const res = await mongoose.connect(
+        getDbConnectionString(),
+        { useNewUrlParser: true, useUnifiedTopology: true },
+        err => {
+          if (err) throw new Error("conection failed :(");
+        }
+      );
+      cb((err = null), res);
+    } catch (error) {
+      cb(error, undefined);
+    }
+  }
+};
