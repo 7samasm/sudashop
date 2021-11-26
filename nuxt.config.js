@@ -114,7 +114,7 @@ module.exports = {
     ]
   ],
   axios: {
-    browserBaseURL: "/"
+    // browserBaseURL: "/"
   },
   auth: {
     redirect: {
@@ -149,6 +149,6 @@ module.exports = {
     ]
   },
   env: {
-    baseUrl: process.env.BASE_URL || "http://localhost:7878"
+    baseUrl: process.env.BASE_URL
   }
 };
