@@ -100,12 +100,7 @@ const emitErrors = (ctx, error) => {
 };
 
 const getEnvironmentVariable = variable => process.env[variable];
-const getGlobalDBUrl = () =>
-  `mongodb://${process.env[consts.DB_USERNAME]}:${
-    process.env[consts.DB_PASSWORD]
-  }@${process.env[consts.DB]}-mongodb.services.clever-cloud.com:27017/${
-    process.env[consts.DB]
-  }`;
+const getGlobalDBUrl = () => process.env.MONGODB_ADDON_URI;
 const getLocalDBUrl = () =>
   `mongodb://localhost:27017/${process.env[consts.DB]}`;
 
