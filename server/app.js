@@ -15,6 +15,9 @@ async function start() {
   const { HOST, PORT, API } = consts;
 
   config.dev = !(process.env.NODE_ENV === "production");
+  config.env.baseUrl = process.env.BASE_URL;
+
+  console.log(config.env.baseUrl);
 
   const nuxt = new Nuxt(config);
 
