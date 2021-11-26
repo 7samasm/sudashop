@@ -4,7 +4,7 @@ const compression = require("compression");
 const cors = require("cors");
 
 module.exports = app => {
-  const cors = require("cors");
+  app.use(cors());
   app.use(compression());
   app.use(json({ urlencoded: true }));
   app.use(cookieParser());
