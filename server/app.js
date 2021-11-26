@@ -1,6 +1,5 @@
 const express = require("express");
 const { Nuxt, Builder } = require("nuxt");
-const cors = require("cors");
 require("dotenv").config();
 
 const config = require("../nuxt.config.js");
@@ -12,40 +11,37 @@ const { getEnvironmentVariable } = require("./utils/helpers.js");
 
 // Start nuxt.js
 async function start() {
+  await connectDb();
   const { HOST, PORT, API } = consts;
-  const app = express();
-  app.use(cors());
 
-  // app.keys = ['hare-server']
-  config.dev = !(app.env === "production");
+  config.dev = !(process.env.NODE_ENV === "production");
 
   const nuxt = new Nuxt(config);
+
   // Build only in dev mode
   if (config.dev && +getEnvironmentVariable("BUILD_NUXT_ON_DEV")) {
-    const devConfigs = config.development;
-    if (devConfigs && devConfigs.proxies) {
-      for (const proxyItem of devConfigs.proxies) {
-        // eslint-disable-next-line no-console
-        console.log(
-          `Active Proxy: path[${proxyItem.path}] target[${proxyItem.target}]`
-        );
-        app.use(proxy(proxyItem.path, proxyItem));
-      }
-    }
+    // const devConfigs = config.development;
+    // if (devConfigs && devConfigs.proxies) {
+    //   for (const proxyItem of devConfigs.proxies) {
+    //     // eslint-disable-next-line no-console
+    //     console.log(
+    //       `Active Proxy: path[${proxyItem.path}] target[${proxyItem.target}]`
+    //     );
+    //     app.use(proxy(proxyItem.path, proxyItem));
+    //   }
+    // }
     await new Builder(nuxt).build();
   }
 
-  // select sub-app (admin/api) according to host subdomain (could also be by analysing request.url);
-  // separate sub-apps can be used for modularisation of a large system, for different login/access
-  // rights for public/protected elements, and also for different functionality between api & web
-  // pages (content negotiation, error handling, handlebars templating, etc).
+  const app = express();
+
+  useMiddlewares(app);
+  useRoutes(app);
 
   app.use(async (req, res, next) => {
-    // use subdomain to determine which app to serve: www. as default, or admin. or api
-    // note: could use root part of path instead of sub-domains e.g. ctx.request.url.split('/')[1]
-    req.subapp = req.url.split("/")[1]; // subdomain = part after first '/' of hostname
+    req.subapp = req.url.split("/")[1];
     if (req.subapp !== API) {
-      res.status(200); // koa defaults to 404 when it sees that status is unset
+      res.status(200);
       await new Promise((resolve, reject) => {
         nuxt.render(req, res, err => (err ? reject(err) : resolve()));
       });
@@ -54,8 +50,8 @@ async function start() {
     }
   });
 
-  useMiddlewares(app);
-  useRoutes(app);
+  app.use(nuxt.render);
+
   // centerlize errors
   app.use((error, req, res, next) => {
     console.log(error.message);
@@ -66,11 +62,7 @@ async function start() {
   });
 
   //conect to db
-  connectDb((err, res) => {
-    if (err) return console.log(err.message);
-    app.listen(PORT, HOST);
-  });
-
+  app.listen(PORT);
   // eslint-disable-next-line no-console
   console.log("\n" + " OPEN " + ` http://${HOST}:${PORT}\n`);
 }

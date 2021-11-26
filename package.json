@@ -20,6 +20,7 @@
     "build:client": "nuxt build",
     "build:server": "rimraf dist/server && cpx \"{nuxt.config.js,server/**}\" dist",
     "start": "cross-env NODE_ENV=production node dist/server/app.js",
+    "start:nodemon": "cross-env NODE_ENV=production nodemon -w dist/server -w dist/nuxt.config.js dist/server/app.js",
     "start:pm2": "pm2 start npm --name=hare -- start",
     "analyze": "nuxt build --analyze",
     "generate": "nuxt generate",
