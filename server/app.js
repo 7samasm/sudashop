@@ -13,30 +13,13 @@ const { getEnvironmentVariable } = require("./utils/helpers.js");
 async function start() {
   await connectDb();
   const { HOST, PORT, API } = consts;
-
   config.dev = !(process.env.NODE_ENV === "production");
-
-  console.log(config.env.baseUrl);
-
   const nuxt = new Nuxt(config);
-
   // Build only in dev mode
-  if (config.dev && +getEnvironmentVariable("BUILD_NUXT_ON_DEV")) {
-    // const devConfigs = config.development;
-    // if (devConfigs && devConfigs.proxies) {
-    //   for (const proxyItem of devConfigs.proxies) {
-    //     // eslint-disable-next-line no-console
-    //     console.log(
-    //       `Active Proxy: path[${proxyItem.path}] target[${proxyItem.target}]`
-    //     );
-    //     app.use(proxy(proxyItem.path, proxyItem));
-    //   }
-    // }
+  if (config.dev && +getEnvironmentVariable("BUILD_NUXT_ON_DEV"))
     await new Builder(nuxt).build();
-  }
 
   const app = express();
-
   useMiddlewares(app);
   useRoutes(app);
 
@@ -60,7 +43,7 @@ async function start() {
     const status = error.statusCode || 500;
     const message = error.message;
     const data = error.data;
-    res.status(status).json({ message: message, data: data });
+    res.status(status).json({ message, data });
   });
 
   //conect to db
