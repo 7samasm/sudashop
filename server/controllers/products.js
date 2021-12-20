@@ -81,11 +81,66 @@ exports.getProductsBySection = async (req, res, next) => {
 exports.getMostCommonProducts = async (req, res, next) => {
   try {
     const prods = await Product.aggregate([
-      { $unwind: "$comments" },
-      { $group: { _id: mapValueKeys(), commentsCount: { $sum: 1 } } },
-      { $project: { ...mapValueKeys("$_id."), commentsCount: 1 } },
-      { $sort: { commentsCount: -1 } },
-      { $limit: 3 }
+      { $unwind: { path: "$comments", preserveNullAndEmptyArrays: true } },
+      {
+        $group: {
+          _id: "$_id",
+          comments: { $push: "$comments" },
+          prod: { $first: "$$ROOT" },
+          commentCount: { $sum: 1 }
+        }
+      },
+      { $sort: { commentCount: -1 } },
+      { $limit: 3 },
+      { $unwind: { path: "$comments", preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: {
+          from: "comments",
+          let: { cid: "$comments" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$_id", "$$cid"] } } },
+            {
+              $lookup: {
+                from: "users",
+                let: {
+                  uid: "$userId"
+                },
+                pipeline: [
+                  { $match: { $expr: { $eq: ["$_id", "$$uid"] } } },
+                  { $project: { name: 1, email: 1 } }
+                ],
+                as: "userId"
+              }
+            },
+            { $unwind: "$userId" }
+          ],
+          as: "comments"
+        }
+      },
+      { $unwind: { path: "$comments", preserveNullAndEmptyArrays: true } },
+      {
+        $group: {
+          _id: "$_id",
+          prod: { $first: "$prod" },
+          comments: { $push: "$comments" },
+          commentCount: { $first: "$commentCount" }
+        }
+      },
+      { $addFields: { "prod.comments": "$comments" } },
+      {
+        $lookup: {
+          from: "users",
+          let: { uid: "$prod.userId" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$_id", "$$uid"] } } },
+            { $project: { name: 1, email: 1 } }
+          ],
+          as: "prod.userId"
+        }
+      },
+      { $unwind: { path: "$prod.userId", preserveNullAndEmptyArrays: true } },
+      { $sort: { commentCount: -1 } },
+      { $replaceRoot: { newRoot: "$prod" } }
     ]);
     res.status(200).json(prods);
   } catch (error) {
