@@ -92,3 +92,80 @@ exports.getMostCommonProducts = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.getNProductsPerSection = async (req, res, next) => {
+  try {
+    const prods = await Product.aggregate([
+      { $sort: { createdAt: -1 } },
+      {
+        $group: {
+          _id: "$section",
+          prods: { $push: "$$ROOT" },
+          count: { $sum: 1 }
+        }
+      },
+      { $project: { count: 1, recent: { $slice: ["$prods", 0, 7] } } },
+      { $unwind: { path: "$recent", preserveNullAndEmptyArrays: true } },
+      {
+        $addFields: {
+          "recent.comments": {
+            $cond: [
+              {
+                $or: [
+                  { $isArray: "$recent.comments" },
+                  { $eq: [{ $ifNull: ["$recent.comments", 0] }, 1] }
+                ]
+              },
+              "$recent.comments",
+              []
+            ]
+          }
+        }
+      },
+      {
+        $lookup: {
+          from: "users",
+          let: { uid: "$recent.userId" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$_id", "$$uid"] } } },
+            { $project: { name: 1, email: 1 } }
+          ],
+          as: "recent.userId"
+        }
+      },
+      { $unwind: { path: "$recent.userId", preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: {
+          from: "comments",
+          let: { cmnts: "$recent.comments" },
+          pipeline: [
+            { $match: { $expr: { $in: ["$_id", "$$cmnts"] } } },
+            {
+              $lookup: {
+                from: "users",
+                let: { uid: "$userId" },
+                pipeline: [
+                  { $match: { $expr: { $eq: ["$_id", "$$uid"] } } },
+                  { $project: { name: 1, email: 1 } }
+                ],
+                as: "userId"
+              }
+            },
+            { $unwind: "$userId" }
+          ],
+          as: "recent.comments"
+        }
+      },
+      {
+        $group: {
+          _id: "$_id",
+          count: { $first: "$count" },
+          products: { $push: "$recent" }
+        }
+      }
+    ]);
+    res.status(200).json(prods);
+  } catch (error) {
+    next(error);
+  }
+};

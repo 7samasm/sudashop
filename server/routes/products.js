@@ -1,13 +1,20 @@
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 /*  Routes to define development "kitchen sink" samples                                           */
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-const express = require('express')
-const productController = require('../controllers/products')
+const express = require("express");
+const productController = require("../controllers/products");
 
-const router = express.Router()
-router.get('/products',productController.getIndex)
-router.get('/products/:id',productController.getProduct)
-router.get('/products/section/:section',productController.getProductsBySection)
-router.get('/products/stats/common',productController.getMostCommonProducts)
+const router = express.Router();
+router.get("/products", productController.getIndex);
+router.get(
+  "/products/nproducts-per-section",
+  productController.getNProductsPerSection
+);
+router.get("/products/:id", productController.getProduct);
+router.get(
+  "/products/section/:section",
+  productController.getProductsBySection
+);
+router.get("/products/stats/common", productController.getMostCommonProducts);
 // router.post()
-module.exports = router
+module.exports = router;
