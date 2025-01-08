@@ -217,7 +217,8 @@ exports.getNProductsPerSection = async (req, res, next) => {
           count: { $first: "$count" },
           products: { $push: "$recent" }
         }
-      }
+      },
+      { $sort : { count : -1 } },
     ]);
     res.status(200).json(prods);
   } catch (error) {
