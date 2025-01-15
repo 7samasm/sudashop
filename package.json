@@ -1,6 +1,6 @@
 {
   "name": "Sudashop",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Based on Vue.js , Koa 2.x, vuetify-UI and Nuxt.js",
   "author": "7sam",
   "license": "MIT",
@@ -95,7 +95,7 @@
     "standard-version": "6.0.1"
   },
   "engines": {
-    "node": "12.22.6",
-    "npm": "6.14.15"
+    "node": "14.21.3",
+    "npm": ">=6.14.18"
   }
 }

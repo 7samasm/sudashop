@@ -1,13 +1,18 @@
-FROM node:8-alpine
+FROM node:14.21.3-alpine as build
+# Create app directory!
+RUN mkdir -p /app
+#make the 'app' folder the current working directory
+WORKDIR /app
+# Copy package.json
+COPY package.json .
+# Install dependencies
+RUN npm install
+# Copy app source code
+COPY . .
 
-# Create app directory
-RUN mkdir -p /usr/app
-WORKDIR /usr/app
+RUN npm run build
+# Expose port and start application
+EXPOSE 7878
 
-# Bundle app source
-COPY package.json ./
-COPY node_modules ./node_modules/
-COPY dist ./dist
-
-EXPOSE 3000
-CMD [ "yarn", "start" ]
+# Start the application
+CMD ["npm", "start"] 

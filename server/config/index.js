@@ -9,13 +9,17 @@ const {
 // dont forget to use Environment Variables in local machine or global
 
 const getDbConnectionString = () => {
-  if (getEnvironmentVariable("NODE_ENV") === "production")
+  if (
+    getEnvironmentVariable("NODE_ENV") === "production" &&
+    process.env.BUILD_FOR_PROD === "true"
+  )
     return getGlobalDBUrl();
   return getLocalDBUrl();
 };
 
 module.exports = {
   async connectDb(cb) {
+    console.log(getDbConnectionString());
     return mongoose.connect(
       getDbConnectionString(),
       { useNewUrlParser: true, useUnifiedTopology: true },

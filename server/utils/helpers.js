@@ -100,9 +100,8 @@ const emitErrors = (ctx, error) => {
 };
 
 const getEnvironmentVariable = variable => process.env[variable];
-const getGlobalDBUrl = () => process.env.MONGODB_ADDON_URI;
-const getLocalDBUrl = () =>
-  `mongodb://localhost:27017/${process.env[consts.DB]}`;
+const getGlobalDBUrl = () => process.env.CLOUD_MONGODB_URL;
+const getLocalDBUrl = () => `mongodb://${process.env.LOCAL_DB_HOST}/shop`;
 
 const validResult = req => {
   const errs = validationResult(req);

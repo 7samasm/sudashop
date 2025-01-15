@@ -1,5 +1,6 @@
 const express = require("express");
 const { Nuxt, Builder } = require("nuxt");
+const cors = require("cors");
 require("dotenv").config();
 
 const config = require("../nuxt.config.js");
@@ -9,7 +10,7 @@ const { connectDb } = require("./config");
 const consts = require("./utils/consts");
 const { getEnvironmentVariable } = require("./utils/helpers.js");
 
-// Start nuxt.js
+// Start nuxt.js . .
 async function start() {
   await connectDb();
   const { HOST, PORT, API } = consts;
@@ -20,6 +21,7 @@ async function start() {
     await new Builder(nuxt).build();
 
   const app = express();
+  app.use(cors());
   useMiddlewares(app);
   useRoutes(app);
 
